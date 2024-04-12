@@ -1,14 +1,12 @@
-import * as api from "@/api/site";
-import { redirect } from "next/navigation";
-import Search from "@/components/site/Search"
+import * as api from '@/api/server'
+import { redirect } from 'next/navigation';
 
 export default async function page() {
-
-
-
+  const logged = await api.pingAdmin();
+  if (!logged) return redirect('/admin/login');
   return (
-    <main className="text-center mx-auto max-w-lg p-5">
+    <div className="">
       Painel Admin
-    </main>
+    </div>
   )
 }	

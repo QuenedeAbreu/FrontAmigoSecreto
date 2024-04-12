@@ -1,14 +1,70 @@
-import * as api from "@/api/site";
-import { redirect } from "next/navigation";
-import Search from "@/components/site/Search"
+"use client"
 
-export default async function page() {
+import { Button } from "@/components/admin/Button";
+import { IconLoad } from "@/components/admin/IconLoad";
+import { InputField } from "@/components/admin/inputField";
+import { useState } from "react";
+import * as api from '@/api/admin'
+import { setCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
 
+
+export default function page() {
+  const [emailInput, setEmailInput] = useState('');
+  const [passwordInput, setPasswordInput] = useState('');
+  const [warning, setWarning] = useState(false);
+  const [warningMessage, setWarningMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+  const router = useRouter()
+
+  const handleLoginButton = async () => {
+
+    if (emailInput && passwordInput) {
+      setWarningMessage('')
+      setWarning(false)
+      setLoading(true)
+      const json = await api.login(emailInput, passwordInput)
+
+      setLoading(false)
+      if (!json.token) {
+        setWarning(true)
+        setWarningMessage(json.response.data.message)
+      } else {
+        setCookie('token', json.token)
+        router.push('/admin')
+      }
+    }
+  }
 
 
   return (
-    <main className="text-center mx-auto max-w-lg p-5">
-      Pagina de Login
-    </main>
+    <div className="text-center py-4">
+      <p className="font-bold">Login</p>
+      <div className="mx-auto max-w-lg">
+        <InputField
+          type="email"
+          value={emailInput}
+          onChange={e => setEmailInput(e.target.value)}
+          placeholder="Email"
+          error={warning}
+          disabled={loading}
+        />
+        <InputField
+          type="password"
+          value={passwordInput}
+          onChange={e => setPasswordInput(e.target.value)}
+          placeholder="Senha"
+          error={warning}
+          disabled={loading}
+        />
+
+        <Button
+          value={loading ? <div><IconLoad /> Carregando...</div> : 'Entrar'}
+          onClick={handleLoginButton}
+          disabled={emailInput === '' || passwordInput === '' || loading}
+        />
+        {warning && <p className="text-sm text-red-600 border border-dashed border-gray-400 p-3">{warningMessage}</p>}
+      </div>
+    </div>
   )
 }	
