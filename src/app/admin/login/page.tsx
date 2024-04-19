@@ -59,7 +59,7 @@ export default function page() {
         />
 
         <Button
-          value={loading ? <div><IconLoad /> Carregando...</div> : 'Entrar'}
+          value={loading ? <div><i className="pi pi-spin pi-spinner" style={{ fontSize: '1rem' }}></i> Carregando...</div> : 'Entrar'}
           onClick={handleLoginButton}
           disabled={emailInput === '' || passwordInput === '' || loading}
         />

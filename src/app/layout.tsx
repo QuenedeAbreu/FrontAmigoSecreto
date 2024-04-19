@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 import './globals.css'
-
+import 'primeicons/primeicons.css'
 
 
 export const metadata: Metadata = {
