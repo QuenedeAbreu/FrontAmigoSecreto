@@ -5,43 +5,54 @@ import { Event } from '@/types/events'
 import { EventItemPlaceholder, EventItemNotFount, EventItem } from '@/components/admin/events/EventItem'
 import { ItemButton } from '@/components/admin/ItemButton'
 import { FaPlus } from 'react-icons/fa'
-
+import { FullPageLoading } from '@/components/admin/FullPageLoading';
 export const AdminPage = () => {
   const [events, setEvents] = useState<Event[]>([])
-  const [loading, setLoading] = useState(true);
+  const [loadingSkeleton, setLoadingSkeleton] = useState(true);
+  const [PageLoading, setPageLoading] = useState(false)
 
   const loadEvents = async () => {
-    setLoading(true)
+    setLoadingSkeleton(true)
     const eventsList = await api.getEvents();
-    setLoading(false);
+    setLoadingSkeleton(false);
     setEvents(eventsList as Event[]);
   }
   useEffect(() => {
     loadEvents();
   }, [])
 
+  const openFullPageLoading = (estado: boolean) => {
+    setPageLoading(estado)
+  }
+
+
   return (
     <div>
-      <div className='p-3 flex items-center'>
+
+
+      {PageLoading && <FullPageLoading />}
+      <div className='p-3 flex items-center' >
         <h1 className='text-2xl flex-1'>Eventos</h1>
         <div>
           <ItemButton
             IconElement={FaPlus}
             onClick={() => { }}
+
           />
         </div>
       </div>
       <div className='my-3 '>
-        {!loading && events.length > 0 && events.map(item => (
+        {!loadingSkeleton && events.length > 0 && events.map(item => (
           <EventItem
             key={item.id}
             item={item}
             refreshAction={loadEvents}
             openModal={() => { }}
+            openFullPageLoading={openFullPageLoading}
           />
         ))}
-        {!loading && events.length === 0 && <EventItemNotFount />}
-        {loading && <>
+        {!loadingSkeleton && events.length === 0 && <EventItemNotFount />}
+        {loadingSkeleton && <>
           <EventItemPlaceholder />
           <EventItemPlaceholder />
         </>}
