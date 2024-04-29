@@ -28,8 +28,6 @@ export const AdminPage = () => {
 
   return (
     <div>
-
-
       {PageLoading && <FullPageLoading />}
       <div className='p-3 flex items-center' >
         <h1 className='text-2xl flex-1'>Eventos</h1>
@@ -37,7 +35,6 @@ export const AdminPage = () => {
           <ItemButton
             IconElement={FaPlus}
             onClick={() => { }}
-
           />
         </div>
       </div>
