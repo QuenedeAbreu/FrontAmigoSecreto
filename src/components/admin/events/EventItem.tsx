@@ -13,27 +13,27 @@ type Props = {
   item: Event;
   refreshAction: () => void;
   openModal: (event: Event) => void;
-  openFullPageLoading: (item: boolean) => void;
+  setPageLoading: (item: boolean) => void;
 }
 
 
-export const EventItem = ({ item, refreshAction, openModal, openFullPageLoading }: Props) => {
+export const EventItem = ({ item, refreshAction, openModal, setPageLoading }: Props) => {
   const [openAndCloseModalConfirm, setOpenAndCloseModalConfirm] = useState(false);
-  const [openAndloseModalErro, setOpenAndloseModalErro] = useState(true)
+  const [openAndloseModalErro, setOpenAndloseModalErro] = useState(false)
 
   const handleEditButton = () => openModal(item)
 
 
   const handleDeleteButton = async () => {
     setOpenAndCloseModalConfirm(false);
-    openFullPageLoading(true)
+    setPageLoading(true)
     const resulOneEvente = await api.getOneEvent(item.id) as Event
     if (resulOneEvente.status === false) {
       await api.deleteEvent(item.id);
       refreshAction();
-      openFullPageLoading(false)
+      setPageLoading(false)
     } else {
-      openFullPageLoading(false)
+      setPageLoading(false)
       setOpenAndloseModalErro(true)
     }
 

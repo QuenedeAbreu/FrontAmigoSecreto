@@ -6,12 +6,18 @@ import { EventItemPlaceholder, EventItemNotFount, EventItem } from '@/components
 import { ItemButton } from '@/components/admin/ItemButton'
 import { FaPlus } from 'react-icons/fa'
 import { FullPageLoading } from '@/components/admin/FullPageLoading';
+import { ModalScreens } from '@/types/ModalScreens'
+import { Modal } from '@/components/admin/Modal'
+import { EventAdd } from '@/components/admin/events/EventAdd'
+
 export const AdminPage = () => {
   const [events, setEvents] = useState<Event[]>([])
   const [loadingSkeleton, setLoadingSkeleton] = useState(true);
-  const [PageLoading, setPageLoading] = useState(false)
+  const [PageLoading, setPageLoading] = useState(false);
+  const [modalScreen, setModalScreen] = useState<ModalScreens>(null);
 
   const loadEvents = async () => {
+    setModalScreen(null)
     setLoadingSkeleton(true)
     const eventsList = await api.getEvents();
     setLoadingSkeleton(false);
@@ -21,9 +27,9 @@ export const AdminPage = () => {
     loadEvents();
   }, [])
 
-  const openFullPageLoading = (estado: boolean) => {
-    setPageLoading(estado)
-  }
+  // const openFullPageLoading = (estado: boolean) => {
+  //   setPageLoading(estado)
+  // }
 
 
   return (
@@ -34,7 +40,7 @@ export const AdminPage = () => {
         <div>
           <ItemButton
             IconElement={FaPlus}
-            onClick={() => { }}
+            onClick={() => setModalScreen('add')}
           />
         </div>
       </div>
@@ -45,7 +51,7 @@ export const AdminPage = () => {
             item={item}
             refreshAction={loadEvents}
             openModal={() => { }}
-            openFullPageLoading={openFullPageLoading}
+            setPageLoading={setPageLoading}
           />
         ))}
         {!loadingSkeleton && events.length === 0 && <EventItemNotFount />}
@@ -54,7 +60,18 @@ export const AdminPage = () => {
           <EventItemPlaceholder />
         </>}
       </div>
-
+      {modalScreen &&
+        <Modal
+          onClose={() => setModalScreen(null)}
+        >
+          {modalScreen === 'add' &&
+            <EventAdd
+              refreshAction={loadEvents}
+              setPageLoading={setPageLoading}
+            />
+          }
+        </Modal>
+      }
     </div>
   )
 

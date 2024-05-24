@@ -8,8 +8,9 @@ type Props = {
   placeholder?: string;
   disabled?: boolean;
   error?: boolean;
+  errorMessage?: string
 }
-export const InputField = ({ type, value, onChange, placeholder, disabled, error }: Props) => {
+export const InputField = ({ type, value, onChange, placeholder, disabled, error, errorMessage }: Props) => {
   return (
     <div className="w-full my-3">
       <input
@@ -20,9 +21,10 @@ export const InputField = ({ type, value, onChange, placeholder, disabled, error
         disabled={disabled}
 
         className={`w-full block text-lg p-3 outline-none rounded bg-gray-900 text-white
-          border-b-2 ${error ? 'border-red-600' : 'border-gray-900'}
+          border-b-2 ${error || errorMessage ? 'border-red-600' : 'border-gray-900'}
         focus:border-white`}
       />
+      {errorMessage && <p className="text-red-600 text-sm mt-1">{errorMessage}</p>}
     </div>
   )
 }

@@ -7,6 +7,7 @@ import { useState } from "react";
 import * as api from '@/api/admin'
 import { setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
+import { BiLogIn } from "react-icons/bi";
 
 
 export default function page() {
@@ -61,6 +62,7 @@ export default function page() {
         <Button
           value={loading ? <div><i className="pi pi-spin pi-spinner" style={{ fontSize: '1rem' }}></i> Carregando...</div> : 'Entrar'}
           onClick={handleLoginButton}
+          IconElement={BiLogIn}
           disabled={emailInput === '' || passwordInput === '' || loading}
         />
         {warning && <p className="text-sm text-red-600 border border-dashed border-gray-400 p-3">{warningMessage}</p>}

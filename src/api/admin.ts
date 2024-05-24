@@ -23,7 +23,7 @@ export const getEvents = async () =>{
     })
     return json.data.events as Event[] ?? [];
   } catch (error) {
-    return error
+    return error as Error
   }
 }
 
@@ -38,10 +38,28 @@ export const getOneEvent = async (id: number) =>{
     })
     return json.data.event as Event;
   } catch (error) {
-    return error
+    return error as Error
   }
 }
 
+type AddEventData ={
+  title:string,
+  description:string,
+  grouped:boolean
+}
+export const addEvent = async (data: AddEventData): Promise<Event | false | Error > =>{
+  const token = getCookie('token');
+  try {
+    const json = await req.post('/admin/events',data,{
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return json.data.event as Event ?? false;
+  } catch (error) {
+    return error as Error
+  }
+}
 
 export const deleteEvent = async (id:number) =>{
   const token = getCookie('token');
@@ -53,6 +71,7 @@ export const deleteEvent = async (id:number) =>{
     })
     return !json.data.error;
   } catch (error) {
-    return error
+    return error as Error
   }
 }
+
