@@ -21,7 +21,7 @@ export const EventItem = ({ item, refreshAction, openModal, setPageLoading }: Pr
   const [openAndCloseModalConfirm, setOpenAndCloseModalConfirm] = useState(false);
   const [openAndloseModalErro, setOpenAndloseModalErro] = useState(false)
 
-  const handleEditButton = () => openModal(item)
+  const handleEditButton = () => { openModal(item) }
 
 
   const handleDeleteButton = async () => {

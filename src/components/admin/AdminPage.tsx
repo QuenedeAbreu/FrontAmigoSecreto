@@ -9,12 +9,14 @@ import { FullPageLoading } from '@/components/admin/FullPageLoading';
 import { ModalScreens } from '@/types/ModalScreens'
 import { Modal } from '@/components/admin/Modal'
 import { EventAdd } from '@/components/admin/events/EventAdd'
+import { EventEdit } from '@/components/admin/events/EventEdit'
 
 export const AdminPage = () => {
   const [events, setEvents] = useState<Event[]>([])
   const [loadingSkeleton, setLoadingSkeleton] = useState(true);
   const [PageLoading, setPageLoading] = useState(false);
   const [modalScreen, setModalScreen] = useState<ModalScreens>(null);
+  const [selectedEvent, setSelectedEvent] = useState<Event>();
 
   const loadEvents = async () => {
     setModalScreen(null)
@@ -22,6 +24,12 @@ export const AdminPage = () => {
     const eventsList = await api.getEvents();
     setLoadingSkeleton(false);
     setEvents(eventsList as Event[]);
+  }
+
+  const editEvent = async (event: Event) => {
+    setSelectedEvent(event)
+    setModalScreen('edit')
+
   }
   useEffect(() => {
     loadEvents();
@@ -50,7 +58,7 @@ export const AdminPage = () => {
             key={item.id}
             item={item}
             refreshAction={loadEvents}
-            openModal={() => { }}
+            openModal={event => editEvent(event)}
             setPageLoading={setPageLoading}
           />
         ))}
@@ -60,6 +68,7 @@ export const AdminPage = () => {
           <EventItemPlaceholder />
         </>}
       </div>
+
       {modalScreen &&
         <Modal
           onClose={() => setModalScreen(null)}
@@ -68,10 +77,23 @@ export const AdminPage = () => {
             <EventAdd
               refreshAction={loadEvents}
               setPageLoading={setPageLoading}
+              PageLoading={PageLoading}
             />
           }
+          {modalScreen === 'edit' &&
+            <EventEdit
+              refreshAction={loadEvents}
+              event={selectedEvent}
+              setPageLoading={setPageLoading}
+              PageLoading={PageLoading}
+            />
+          }
+
+
         </Modal>
       }
+
+
     </div>
   )
 

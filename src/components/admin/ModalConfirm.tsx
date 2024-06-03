@@ -48,10 +48,10 @@ export const ModalConfirm = ({ title, description, onConfirm, onCancel, eventTit
               </h2>
 
               <p className="text-gray-500">
-                {description}
+                {eventTitle}
               </p>
               <p className="text-gray-500">
-                {eventTitle}
+                {description}
               </p>
             </div>
           </div>

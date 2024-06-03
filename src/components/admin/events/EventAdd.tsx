@@ -9,9 +9,11 @@ import * as api from '@/api/admin'
 type Props = {
   refreshAction: () => void;
   setPageLoading: (item: boolean) => void;
+  PageLoading: boolean;
 }
 
-export const EventAdd = ({ refreshAction, setPageLoading }: Props) => {
+export const EventAdd = ({ refreshAction, setPageLoading, PageLoading }: Props) => {
+
   const [titleField, setTitleField] = useState('');
   const [descriptionField, setDescriptionField] = useState('');
   const [groupField, setGroupField] = useState(false);
@@ -24,6 +26,7 @@ export const EventAdd = ({ refreshAction, setPageLoading }: Props) => {
   })
 
   const handleAddButton = async () => {
+    setErrors([])
     setPageLoading(true)
     const data = eventSchema.safeParse({
       titleField,
@@ -77,13 +80,11 @@ export const EventAdd = ({ refreshAction, setPageLoading }: Props) => {
       </div>
       <div>
         <Button
-          value="Adicionar"
+          value={PageLoading ? <div><i className="pi pi-spin pi-spinner" style={{ fontSize: '1rem' }}></i> Salvando...</div> : 'Adicionar'}
           onClick={handleAddButton}
           IconElement={MdEventAvailable}
         />
       </div>
-
-
     </div>
   );
 }
