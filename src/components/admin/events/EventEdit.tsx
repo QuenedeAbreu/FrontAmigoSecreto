@@ -2,6 +2,7 @@
 import { Event } from '@/types/events'
 import { useState } from 'react';
 import { EventTabInfo } from '@/components/admin/events/EventTabInfo';
+import { EventTabGroups } from '@/components/admin/groups/EventTabGroups';
 type Props = {
   event: Event | undefined;
   refreshAction: () => void;
@@ -28,7 +29,11 @@ export const EventEdit = ({ event, refreshAction, setPageLoading, PageLoading }:
           setPageLoading={setPageLoading}
           PageLoading={PageLoading}
         />}
-        {tab === 'groups' && 'Grupos'}
+        {tab === 'groups' && <EventTabGroups
+          eventId={event.id}
+          setPageLoading={setPageLoading}
+          PageLoading={PageLoading}
+        />}
         {tab === 'people' && 'Pessoas'}
       </div>
     </div>
