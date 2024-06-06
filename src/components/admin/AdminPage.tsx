@@ -88,8 +88,6 @@ export const AdminPage = () => {
               PageLoading={PageLoading}
             />
           }
-
-
         </Modal>
       }
 

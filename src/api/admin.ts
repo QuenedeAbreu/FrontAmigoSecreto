@@ -2,6 +2,7 @@ import {req} from '@/api/axios'
 import { getCookie } from 'cookies-next';
 import { Event } from '@/types/events'
 import { Group } from '@/types/Group';
+import { PersonComplete } from '@/types/PersonComplete';
 
 
 export const login = async (email:string, password:string) =>{
@@ -170,4 +171,82 @@ export const deleteGroup = async (id:number, eventId:number) =>{
   }
 }
 
+//Pessoas 
+export const getPeople = async (eventId: number,groupId:number) =>{
+  const token = getCookie('token');
+  try {
+    const json = await req.get(`/admin/events/${eventId}/groups/${groupId}/people`,{
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return json.data.peoples as PersonComplete[] ?? [];
+  } catch (error) {
+    console.log(error);
+    return false
+  }
+}
 
+type AddPersonData={
+  name:string,
+  cpf:string
+}
+export const addPerson = async (EventId:number,groupId:number,data:AddPersonData):Promise<PersonComplete | false | number> =>{
+  const token = getCookie('token');
+    try {
+      // Consultar de ja existe usuario com o cpf informado
+      // Se existir retornar false
+      const jsonresultCpf = await req.get(`/admin/events/${EventId}/groups/${groupId}/people`,{
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+        })
+        const resultCpf = jsonresultCpf.data.peoples as PersonComplete[] ?? [];
+        const result = resultCpf.find(item => item.cpf === data.cpf);
+        if(result) return 1;
+
+      const json = await req.post(`/admin/events/${EventId}/groups/${groupId}/people`,data,{
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      })
+      return json.data as PersonComplete ?? false;
+    } catch (error) {
+      console.log(error);
+      return false
+    }
+}
+
+type UpdatePersonData={
+  name?:string,
+  cpf?:string
+}
+export const updatePerson = async (id:number,EventId:number,groupId:number,data:UpdatePersonData):Promise<PersonComplete | false> =>{
+  const token = getCookie('token');
+    try {
+      const json = await req.put(`/admin/events/${EventId}/groups/${groupId}/people/${id}`,data,{
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      })
+      return json.data.person as PersonComplete ?? false;
+    } catch (error) {
+      console.log(error);
+      return false
+    }
+}
+
+export const deletePerson = async (id:number, EventId:number, groupId:number) =>{
+  const token = getCookie('token');
+  try {
+    const json = await req.delete(`/admin/events/${EventId}/groups/${groupId}/people/${id}`,{
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return !json.data.error;
+  } catch (error) {
+    console.log(error);
+    return false
+  }
+}
