@@ -221,22 +221,32 @@ type UpdatePersonData={
   name?:string,
   cpf?:string
 }
-export const updatePerson = async (id:number,EventId:number,groupId:number,data:UpdatePersonData):Promise<PersonComplete | false> =>{
+export const updatePerson = async (id:number,groupId:number,EventId:number,data:UpdatePersonData):Promise<PersonComplete | false | number> =>{
   const token = getCookie('token');
-    try {
+  // // Consultar de ja existe usuario com o cpf informado
+  //     // Se existir retornar false
+  //     const jsonresultCpf = await req.get(`/admin/events/${EventId}/groups/${groupId}/people`,{
+  //       headers:{
+  //         Authorization: `Bearer ${token}`
+  //       }
+  //       })
+  //       const resultCpf = jsonresultCpf.data.peoples as PersonComplete[] ?? [];
+  //       const result = resultCpf.find(item => item.cpf === data.cpf);
+  //       if(result) return 1;
+  try {
       const json = await req.put(`/admin/events/${EventId}/groups/${groupId}/people/${id}`,data,{
         headers:{
           Authorization: `Bearer ${token}`
         }
       })
-      return json.data.person as PersonComplete ?? false;
+      return json.data.peopleItem as PersonComplete ?? false;
     } catch (error) {
       console.log(error);
       return false
     }
 }
 
-export const deletePerson = async (id:number, EventId:number, groupId:number) =>{
+export const deletePerson = async (id:number, groupId:number,EventId:number ) =>{
   const token = getCookie('token');
   try {
     const json = await req.delete(`/admin/events/${EventId}/groups/${groupId}/people/${id}`,{

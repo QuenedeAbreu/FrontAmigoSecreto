@@ -3,8 +3,9 @@ import { Group } from '@/types/Group';
 import { useEffect, useState } from 'react';
 import { GroupItemPlaceholder, GroupItemNotFount } from '@/components/admin/groups/GroupItem';
 import { PersonComplete } from '@/types/PersonComplete';
-import { PersonItemPlaceholder, PersonItemNotFount } from '@/components/admin/people/PersonItem';
+import { PersonItemPlaceholder, PersonItemNotFount, PersonItem } from '@/components/admin/people/PersonItem';
 import { PersonAdd } from '@/components/admin/people/PersonAdd'
+import { PersonEdit } from '@/components/admin/people/PersonEdit';
 
 type Props = {
   eventId: number;
@@ -36,6 +37,7 @@ export const EventTabPeople = ({ eventId, PageLoading, setPageLoading }: Props) 
 
   //Listando Pessoas
   const loadPeople = async () => {
+    setSelectedPerson(undefined)
     if (selectedGroupId <= 0) return;
     setPeople([])
     setPeopleLoading(true)
@@ -47,6 +49,13 @@ export const EventTabPeople = ({ eventId, PageLoading, setPageLoading }: Props) 
   useEffect(() => {
     loadPeople()
   }, [selectedGroupId])
+
+  const handleEditButton = (person: PersonComplete) => {
+    setSelectedPerson(person)
+
+  }
+
+
 
   return (
     <div>
@@ -76,18 +85,35 @@ export const EventTabPeople = ({ eventId, PageLoading, setPageLoading }: Props) 
                   PageLoading={PageLoading}
                 />
               }
+              {selectPerson &&
+                <PersonEdit
+                  person={selectPerson}
+                  refreshAction={loadPeople}
+                  setPageLoading={setPageLoading}
+                  PageLoading={PageLoading}
+                />
+              }
             </div>
-            {!peopleLoading && people.length > 0 && people.map(item => {
-              return <div key={item.id}>{item.name} - {item.cpf}</div>
-            })}
+            <div className='w-full max-h-60 overflow-y-auto p-3 my-3'>
+              {!peopleLoading && people.length > 0 && people.map(item => {
+                return <PersonItem
+                  key={item.id}
+                  item={item}
+                  refreshAction={loadPeople}
+                  onEdit={handleEditButton}
+                  setPageLoading={setPageLoading}
+                  PageLoading={PageLoading}
+                />
+              })}
 
-            {peopleLoading &&
-              <>
-                <PersonItemPlaceholder />
-                <PersonItemPlaceholder />
-              </>
-            }
-            {!peopleLoading && people.length === 0 && <PersonItemNotFount />}
+              {peopleLoading &&
+                <>
+                  <PersonItemPlaceholder />
+                  <PersonItemPlaceholder />
+                </>
+              }
+              {!peopleLoading && people.length === 0 && <PersonItemNotFount />}
+            </div>
           </>
         }
       </div>
