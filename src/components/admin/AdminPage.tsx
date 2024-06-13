@@ -11,7 +11,9 @@ import { Modal } from '@/components/admin/Modal'
 import { EventAdd } from '@/components/admin/events/EventAdd'
 import { EventEdit } from '@/components/admin/events/EventEdit'
 
+
 export const AdminPage = () => {
+
   const [events, setEvents] = useState<Event[]>([])
   const [loadingSkeleton, setLoadingSkeleton] = useState(true);
   const [PageLoading, setPageLoading] = useState(false);

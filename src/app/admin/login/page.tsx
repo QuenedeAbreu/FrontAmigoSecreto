@@ -1,13 +1,17 @@
 "use client"
 
 import { Button } from "@/components/admin/Button";
-import { IconLoad } from "@/components/admin/IconLoad";
+// import { IconLoad } from "@/components/admin/IconLoad";
 import { InputField } from "@/components/admin/inputField";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as api from '@/api/admin'
 import { setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { BiLogIn } from "react-icons/bi";
+import { ItemButton } from "@/components/admin/ItemButton";
+import { IoMdPersonAdd } from "react-icons/io";
+import { Modal } from "@/components/admin/Modal";
+import { RegisterFirstUser } from '@/components/admin/RegisterFirstUser'
 
 
 export default function page() {
@@ -16,7 +20,18 @@ export default function page() {
   const [warning, setWarning] = useState(false);
   const [warningMessage, setWarningMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [existsUser, setExistsUser] = useState(false);
+  const [modalScreen, setModalScreen] = useState(false);
   const router = useRouter()
+
+
+  const handleVerifyExistsUser = async () => {
+    const json = await api.verifyExistsUser()
+    setExistsUser(json)
+  }
+  useEffect(() => {
+    handleVerifyExistsUser()
+  }, [])
 
   const handleLoginButton = async () => {
 
@@ -29,14 +44,15 @@ export default function page() {
       setLoading(false)
       if (!json.token) {
         setWarning(true)
+        // console.log(json.response.data.message);
         setWarningMessage(json.response.data.message)
       } else {
+        //console.log(json);
         setCookie('token', json.token)
         router.push('/admin')
       }
     }
   }
-
 
   return (
     <div className="text-center py-4">
@@ -66,6 +82,24 @@ export default function page() {
           disabled={emailInput === '' || passwordInput === '' || loading}
         />
         {warning && <p className="text-sm text-red-600 border border-dashed border-gray-400 p-3">{warningMessage}</p>}
+
+        {existsUser &&
+          <Button
+            IconElement={IoMdPersonAdd}
+            value="Primeiro Usuário"
+            onClick={() => { setModalScreen(true) }}
+          />}
+
+        {modalScreen &&
+          <Modal
+            onClose={() => setModalScreen(false)}
+          >
+            <RegisterFirstUser
+              setModalScreen={setModalScreen}
+              setExistsUser={setExistsUser}
+            />
+          </Modal>
+        }
       </div>
     </div>
   )

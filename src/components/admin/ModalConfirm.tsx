@@ -44,6 +44,7 @@ export const ModalConfirm = ({ title, description, onConfirm, onCancel, eventTit
               <h2 className="text-xl font-bold tracking-tight flex flex-col justify-center items-center" id="page-action.heading">
                 {type == "warning" && <span className='mb-1'>{IconElement ? <IconElement className='animate-pulse-icon text-orange-400' /> : ""}</span>}
                 {type == "error" && <span className='mb-1'>{IconElement ? <IconElement className='animate-pulse-icon text-red-600' /> : ""}</span>}
+                {type == "success" && <span className='mb-1'>{IconElement ? <IconElement className='animate-pulse-icon text-green-500' /> : ""}</span>}
                 {title}
               </h2>
 
@@ -71,18 +72,19 @@ export const ModalConfirm = ({ title, description, onConfirm, onCancel, eventTit
                       {type == 'warning' && <><MdOutlineCancel /> Cancelar</>}
                       {type == 'error' && <><FaCheck className='' /> OK</>}
                       {type == 'info' && <>Cancelar</>}
-                      {type == 'success' && <>Confirmar</>}
+                      {type == 'success' && <><FaCheck className='' /> Confirmar</>}
                     </span>
                   </span>
                 </button>
-                {type != 'error' && <>
+
+                {type != 'error' && type != 'success' && <>
                   <button onClick={onConfirm}
                     type="button"
                     className="inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-white shadow focus:ring-white border-transparent bg-red-600 hover:bg-red-500 focus:bg-red-700 focus:ring-offset-red-700">
 
                     <span className="flex items-center gap-1">
                       <span className="flex items-center gap-1">
-                        <GiConfirmed />Confirmar
+                        <GiConfirmed />
                       </span>
                     </span>
 

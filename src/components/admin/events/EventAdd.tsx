@@ -51,7 +51,7 @@ export const EventAdd = ({ refreshAction, setPageLoading, PageLoading }: Props) 
 
   return (
     <div>
-      <div className="mb-5 ">
+      <div className="mb-5">
         <label>Título</label>
         <InputField
           value={titleField}
@@ -60,6 +60,7 @@ export const EventAdd = ({ refreshAction, setPageLoading, PageLoading }: Props) 
           errorMessage={errors.find(error => error.field === 'titleField')?.message}
         />
       </div>
+
       <div className="mb-5 ">
         <label>Descrição</label>
         <InputField
@@ -69,6 +70,7 @@ export const EventAdd = ({ refreshAction, setPageLoading, PageLoading }: Props) 
           errorMessage={errors.find(error => error.field === 'descriptionField')?.message}
         />
       </div>
+
       <div className="mb-5">
         <label>Agrupar sorteio?</label>
         <input
@@ -78,6 +80,7 @@ export const EventAdd = ({ refreshAction, setPageLoading, PageLoading }: Props) 
           className="block w-5 h-5 mt-3"
         />
       </div>
+
       <div>
         <Button
           value={PageLoading ? <div><i className="pi pi-spin pi-spinner" style={{ fontSize: '1rem' }}></i> Salvando...</div> : 'Adicionar'}
@@ -85,6 +88,7 @@ export const EventAdd = ({ refreshAction, setPageLoading, PageLoading }: Props) 
           IconElement={MdEventAvailable}
         />
       </div>
+
     </div>
   );
 }

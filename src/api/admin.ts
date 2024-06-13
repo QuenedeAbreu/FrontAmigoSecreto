@@ -4,16 +4,34 @@ import { Event } from '@/types/events'
 import { Group } from '@/types/Group';
 import { PersonComplete } from '@/types/PersonComplete';
 
-
+// Uses
 export const login = async (email:string, password:string) =>{
   try {
     const json = await req.post('/admin/login',{email,password})
     return json.data ?? false;
   } catch (error) {
     console.log(error);
+    return error
+  }
+}
+export const verifyExistsUser = async () =>{
+  try {
+    const json = await req.get('/admin/verifyexistsuser/')
+    return json.data.exists ?? false;
+  } catch (error) {
+    // console.log(error);
     return false
   }
 }
+ export const firstRegister = async (name:string,email:string, password:string) =>{
+  try {
+    const json = await req.post('/admin/firstregister/',{name,email, password})
+    return json.data ?? false;
+  } catch (error) {
+    // console.log(error);
+    return false
+  }
+ }
 
 // Eventos
 export const getEvents = async () =>{
