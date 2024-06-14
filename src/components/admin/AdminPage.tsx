@@ -37,11 +37,6 @@ export const AdminPage = () => {
     loadEvents();
   }, [])
 
-  // const openFullPageLoading = (estado: boolean) => {
-  //   setPageLoading(estado)
-  // }
-
-
   return (
     <div>
       {PageLoading && <FullPageLoading />}

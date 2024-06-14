@@ -1,6 +1,7 @@
 import { HeaderAdmin } from "@/components/admin/HeaderAdmin"
 import { Metadata } from "next"
 import { ReactNode } from "react"
+import { GlobalContextProvider } from '@/provider/globlalProvider'
 
 export const metadata: Metadata = {
   title: 'Amigo Secreto - Admin',
@@ -12,9 +13,9 @@ type Props = {
 
 export default async function page({ children }: Props) {
   return (
-    <div>
+    <GlobalContextProvider>
       <HeaderAdmin />
       <main className="mx-auto w-full max-w-3xl p-3">{children}</main>
-    </div>
+    </GlobalContextProvider>
   )
 }	

@@ -12,6 +12,7 @@ import { ItemButton } from "@/components/admin/ItemButton";
 import { IoMdPersonAdd } from "react-icons/io";
 import { Modal } from "@/components/admin/Modal";
 import { RegisterFirstUser } from '@/components/admin/RegisterFirstUser'
+import { useGlobalContext } from '@/provider/globlalProvider'
 
 
 export default function page() {
@@ -22,7 +23,9 @@ export default function page() {
   const [loading, setLoading] = useState(false);
   const [existsUser, setExistsUser] = useState(false);
   const [modalScreen, setModalScreen] = useState(false);
+  const { userOne, setUserOne } = useGlobalContext()
   const router = useRouter()
+
 
 
   const handleVerifyExistsUser = async () => {
@@ -40,20 +43,18 @@ export default function page() {
       setWarning(false)
       setLoading(true)
       const json = await api.login(emailInput, passwordInput)
-
       setLoading(false)
       if (!json.token) {
         setWarning(true)
-        // console.log(json.response.data.message);
         setWarningMessage(json.response.data.message)
       } else {
-        //console.log(json);
+        setUserOne(json.user)
+        setCookie('user', json.user)
         setCookie('token', json.token)
         router.push('/admin')
       }
     }
   }
-
   return (
     <div className="text-center py-4">
       <p className="font-bold">Login</p>
