@@ -58,7 +58,7 @@ export default function page() {
   return (
     <div className="text-center py-4">
       <p className="font-bold">Login</p>
-      <div className="mx-auto max-w-lg">
+      <form className="mx-auto max-w-lg">
         <InputField
           type="email"
           value={emailInput}
@@ -101,7 +101,7 @@ export default function page() {
             />
           </Modal>
         }
-      </div>
+      </form>
     </div>
   )
 }	

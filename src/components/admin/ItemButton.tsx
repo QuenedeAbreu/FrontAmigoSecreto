@@ -8,17 +8,18 @@ type Props = {
   href?: string;
   target?: string;
   raplace?: boolean;
+  type?: "link";
 }
 
-export const ItemButton = ({ IconElement, label, onClick, href, target, raplace }: Props) => {
+export const ItemButton = ({ IconElement, label, onClick, href, target, raplace, type }: Props) => {
   const content = (
-    <div className="p-3 flex flex-col justify-center items-center gap-2 md:flex-row">
+    <div className="p-3 flex justify-center items-center gap-2">
       <div><IconElement /></div>
       {label && <div>{label}</div>}
     </div>
   )
   return (
-    <div className="rounded hover:bg-gray-800 transition ease-in-out ">
+    <div className={`rounded ${type !== 'link' ? 'hover:bg-gray-800' : 'hover:underline'} transition ease-in-out `}>
       {href && !onClick &&
         <Link
           href={href}

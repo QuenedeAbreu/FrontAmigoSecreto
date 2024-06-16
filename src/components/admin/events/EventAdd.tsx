@@ -5,6 +5,8 @@ import { Button } from "@/components/admin/Button";
 import { MdEventAvailable } from "react-icons/md";
 import { z } from "zod";
 import { ErrorItem, getErrorFromZod } from "@/utils/getErrorFromZod";
+import { jwtDecode } from 'jwt-decode'
+import { getCookie } from 'cookies-next';
 import * as api from '@/api/admin'
 type Props = {
   refreshAction: () => void;
@@ -28,6 +30,12 @@ export const EventAdd = ({ refreshAction, setPageLoading, PageLoading }: Props) 
   const handleAddButton = async () => {
     setErrors([])
     setPageLoading(true)
+    const token = getCookie('token');
+    const userTokenDecod = jwtDecode(token as string)
+    if (!userTokenDecod) return
+    const userTokenDecodString = JSON.stringify(userTokenDecod)
+    const userTokenJson = JSON.parse(userTokenDecodString)
+
     const data = eventSchema.safeParse({
       titleField,
       descriptionField,
@@ -40,7 +48,8 @@ export const EventAdd = ({ refreshAction, setPageLoading, PageLoading }: Props) 
     const eventItem = await api.addEvent({
       title: data.data.titleField,
       description: data.data.descriptionField,
-      grouped: data.data.groupField
+      grouped: data.data.groupField,
+      id_user: userTokenJson.id
     })
     if (eventItem) {
       refreshAction()

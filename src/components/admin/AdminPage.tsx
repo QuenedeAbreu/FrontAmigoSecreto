@@ -10,6 +10,8 @@ import { ModalScreens } from '@/types/ModalScreens'
 import { Modal } from '@/components/admin/Modal'
 import { EventAdd } from '@/components/admin/events/EventAdd'
 import { EventEdit } from '@/components/admin/events/EventEdit'
+import { jwtDecode } from 'jwt-decode'
+import { getCookie } from 'cookies-next'
 
 
 export const AdminPage = () => {
@@ -21,9 +23,14 @@ export const AdminPage = () => {
   const [selectedEvent, setSelectedEvent] = useState<Event>();
 
   const loadEvents = async () => {
+    const token = getCookie('token');
+    const userTokenDecod = jwtDecode(token as string)
+    if (!userTokenDecod) return
+    const userTokenDecodString = JSON.stringify(userTokenDecod)
+    const userTokenJson = JSON.parse(userTokenDecodString)
     setModalScreen(null)
     setLoadingSkeleton(true)
-    const eventsList = await api.getEvents();
+    const eventsList = await api.getEvents(userTokenJson.id);
     setLoadingSkeleton(false);
     setEvents(eventsList as Event[]);
   }

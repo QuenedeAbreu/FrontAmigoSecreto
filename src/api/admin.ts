@@ -4,6 +4,7 @@ import { Event } from '@/types/events'
 import { Group } from '@/types/Group';
 import { PersonComplete } from '@/types/PersonComplete';
 
+
 // Uses
 export const login = async (email:string, password:string) =>{
   try {
@@ -34,11 +35,11 @@ export const verifyExistsUser = async () =>{
  }
 
 // Eventos
-export const getEvents = async () =>{
+export const getEvents = async (id_user:number) =>{
   const token = getCookie('token');
   try {
 
-    const json = await req.get('/admin/events',{
+    const json = await req.get(`/admin/events/${id_user}`,{
       headers:{
         Authorization: `Bearer ${token}`
       }
@@ -69,11 +70,13 @@ export const getOneEvent = async (id: number) =>{
 type AddEventData ={
   title:string,
   description:string,
-  grouped:boolean
+  grouped:boolean,
+  id_user?:number
 }
 export const addEvent = async (data: AddEventData): Promise<Event | false | Error > =>{
   const token = getCookie('token');
   try {
+    
     const json = await req.post('/admin/events',data,{
       headers:{
         Authorization: `Bearer ${token}`

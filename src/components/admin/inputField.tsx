@@ -19,7 +19,7 @@ export const InputField = ({ type, value, onChange, placeholder, disabled, error
         onChange={onChange}
         placeholder={placeholder}
         disabled={disabled}
-
+        autoComplete={type === 'password' ? 'on' : ''}
         className={`w-full block text-lg p-3 outline-none rounded bg-gray-900 text-white
           border-b-2 ${error || errorMessage ? 'border-red-600' : 'border-gray-900'}
         focus:border-white`}
