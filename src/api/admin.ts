@@ -35,16 +35,20 @@ export const verifyExistsUser = async () =>{
  }
 
 // Eventos
-export const getEvents = async (id_user:number) =>{
+export const getEvents = async (id_user:number,take:number,skip:number) =>{
+  console.log(take, skip);
   const token = getCookie('token');
   try {
 
-    const json = await req.get(`/admin/events/${id_user}`,{
+    const json = await req.get(`/admin/events/user/${id_user}?take=${take}&skip=${skip}`,{
       headers:{
         Authorization: `Bearer ${token}`
       }
     })
-    return json.data.events as Event[] ?? [];
+    return {
+      events:json.data.events.events as Event[] ?? [],
+      countEvents:json.data.events.countEvents as number
+    };
   } catch (error) {
     console.log(error);
     return false

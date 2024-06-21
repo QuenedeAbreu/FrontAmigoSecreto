@@ -12,6 +12,7 @@ import { EventAdd } from '@/components/admin/events/EventAdd'
 import { EventEdit } from '@/components/admin/events/EventEdit'
 import { jwtDecode } from 'jwt-decode'
 import { getCookie } from 'cookies-next'
+import { Pagination } from '@/components/admin/Pagination'
 
 
 export const AdminPage = () => {
@@ -22,7 +23,11 @@ export const AdminPage = () => {
   const [modalScreen, setModalScreen] = useState<ModalScreens>(null);
   const [selectedEvent, setSelectedEvent] = useState<Event>();
 
-  const loadEvents = async () => {
+  const [qtdItensPage, setQtdItemPage] = useState(4);
+  const [qtdPage, setQtdPage] = useState(1);
+  const [activePagination, setActivePagination] = useState(false);
+
+  const loadEvents = async (activePage: number) => {
     const token = getCookie('token');
     const userTokenDecod = jwtDecode(token as string)
     if (!userTokenDecod) return
@@ -30,9 +35,19 @@ export const AdminPage = () => {
     const userTokenJson = JSON.parse(userTokenDecodString)
     setModalScreen(null)
     setLoadingSkeleton(true)
-    const eventsList = await api.getEvents(userTokenJson.id);
+    // let teste = activePage === 0 ? 0 : activePage * qtdItensPage
+    const eventsList = await api.getEvents(userTokenJson.id, qtdItensPage, activePage * qtdItensPage)
+    console.log(eventsList);
+    // console.log(eventsList);
     setLoadingSkeleton(false);
-    setEvents(eventsList as Event[]);
+    if (eventsList !== false) {
+      const qtdPage = Math.ceil(eventsList.countEvents / qtdItensPage)
+      if (qtdPage) setActivePagination(true)
+      setQtdPage(qtdPage)
+      setEvents(eventsList.events as Event[]);
+    } else {
+      setEvents([]);
+    }
   }
 
   const editEvent = async (event: Event) => {
@@ -41,7 +56,7 @@ export const AdminPage = () => {
 
   }
   useEffect(() => {
-    loadEvents();
+    loadEvents(0);
   }, [])
 
   return (
@@ -61,7 +76,7 @@ export const AdminPage = () => {
           <EventItem
             key={item.id}
             item={item}
-            refreshAction={loadEvents}
+            refreshAction={() => loadEvents(1)}
             openModal={event => editEvent(event)}
             setPageLoading={setPageLoading}
           />
@@ -79,14 +94,14 @@ export const AdminPage = () => {
         >
           {modalScreen === 'add' &&
             <EventAdd
-              refreshAction={loadEvents}
+              refreshAction={() => loadEvents(1)}
               setPageLoading={setPageLoading}
               PageLoading={PageLoading}
             />
           }
           {modalScreen === 'edit' &&
             <EventEdit
-              refreshAction={loadEvents}
+              refreshAction={() => loadEvents(1)}
               event={selectedEvent}
               setPageLoading={setPageLoading}
               PageLoading={PageLoading}
@@ -94,8 +109,12 @@ export const AdminPage = () => {
           }
         </Modal>
       }
-
-
+      {activePagination &&
+        <Pagination
+          loadEvents={loadEvents}
+          qtdPages={qtdPage}
+        />
+      }
     </div>
   )
 
