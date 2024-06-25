@@ -13,6 +13,8 @@ import { EventEdit } from '@/components/admin/events/EventEdit'
 import { jwtDecode } from 'jwt-decode'
 import { getCookie } from 'cookies-next'
 import { Pagination } from '@/components/admin/Pagination'
+import { SearchDropdown } from './Search'
+import { Select, Field, Label } from '@headlessui/react'
 
 
 export const AdminPage = () => {
@@ -27,6 +29,8 @@ export const AdminPage = () => {
   const [qtdPage, setQtdPage] = useState(1);
   const [activePagination, setActivePagination] = useState(false);
 
+  const [search, setSearch] = useState('')
+
   const loadEvents = async (activePage: number) => {
     const token = getCookie('token');
     const userTokenDecod = jwtDecode(token as string)
@@ -37,7 +41,6 @@ export const AdminPage = () => {
     setLoadingSkeleton(true)
     // let teste = activePage === 0 ? 0 : activePage * qtdItensPage
     const eventsList = await api.getEvents(userTokenJson.id, qtdItensPage, activePage * qtdItensPage)
-    console.log(eventsList);
     // console.log(eventsList);
     setLoadingSkeleton(false);
     if (eventsList !== false) {
@@ -49,7 +52,9 @@ export const AdminPage = () => {
       setEvents([]);
     }
   }
-
+  useEffect(() => {
+    console.log(search);
+  }, [search])
   const editEvent = async (event: Event) => {
     setSelectedEvent(event)
     setModalScreen('edit')
@@ -64,6 +69,12 @@ export const AdminPage = () => {
       {PageLoading && <FullPageLoading />}
       <div className='p-3 flex items-center' >
         <h1 className='text-2xl flex-1'>Eventos</h1>
+        <div className='mr-3'>
+          <SearchDropdown
+            search={search}
+            setSearch={setSearch}
+          />
+        </div>
         <div>
           <ItemButton
             IconElement={FaPlus}
@@ -110,10 +121,25 @@ export const AdminPage = () => {
         </Modal>
       }
       {activePagination &&
-        <Pagination
-          loadEvents={loadEvents}
-          qtdPages={qtdPage}
-        />
+        <>
+          <Field>
+            <Label>Linhas por página:</Label>
+            <Select
+              onChange={(e) => { alert(e.target.value) }}
+              name="qtdlinhas"
+              className="text-center w-11 ml-3 bg-gray-950 rounded border-gray-700 border" aria-label="Quantidade de Registros">
+              <option value={2}>2</option>
+              <option value={4}>4</option>
+              <option value={6}>6</option>
+              <option value={8}>8</option>
+              <option value={10}>10</option>
+            </Select>
+          </Field>
+          <Pagination
+            loadEvents={loadEvents}
+            qtdPages={qtdPage}
+          />
+        </>
       }
     </div>
   )

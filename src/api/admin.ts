@@ -36,7 +36,6 @@ export const verifyExistsUser = async () =>{
 
 // Eventos
 export const getEvents = async (id_user:number,take:number,skip:number) =>{
-  console.log(take, skip);
   const token = getCookie('token');
   try {
 

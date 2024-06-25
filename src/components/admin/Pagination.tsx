@@ -34,12 +34,12 @@ export const Pagination = ({ qtdPages = 1, loadEvents }: Props) => {
   useEffect(() => {
     setItemPagination(ItensPagination(active, qtdPages).filter(item => (item !== '')))
     loadEvents(active - 1)
-    console.log(ItensPagination(active, qtdPages));
+    //console.log(ItensPagination(active, qtdPages));
   }, [active])
 
 
   return (
-    <div className="flex items-center gap-1 justify-center ">
+    <div className="flex items-center justify-between">
       <Button
         variant="text"
         className={`flex items-center gap-2 px-3 py-2 ${active !== 1 ? 'hover:bg-gray-800' : ''}`}
