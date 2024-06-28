@@ -25,6 +25,7 @@ export const HeaderAdmin = () => {
     router.push('/admin/login')
   }
 
+
   return (
     <header className="bg-gray-800 text-center py-5 flex justify-center items-center flex-col">
       <div>

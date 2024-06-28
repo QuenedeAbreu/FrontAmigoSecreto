@@ -51,12 +51,13 @@ export const Pagination = ({ qtdPages, loadEvents, qtdItensPage, setQtdItemPage,
         <Select
           onChange={(e) => { setQtdItemPage(parseInt(e.target.value)) }}
           name="qtdlinhas"
+          defaultValue={qtdItensPage}
           className="text-center w-11 ml-3 bg-gray-950 rounded border-gray-700 border" aria-label="Quantidade de Registros">
-          <option selected={qtdItensPage === 2} value={2}>2</option>
-          <option selected={qtdItensPage === 4} value={4}>4</option>
-          <option selected={qtdItensPage === 6} value={6}>6</option>
-          <option selected={qtdItensPage === 8} value={8}>8</option>
-          <option selected={qtdItensPage === 10} value={10}>10</option>
+          <option value={2}>2</option>
+          <option value={4}>4</option>
+          <option value={6}>6</option>
+          <option value={8}>8</option>
+          <option value={10}>10</option>
         </Select>
       </Field>
       <div className=" flex flex- items-center justify-between">
