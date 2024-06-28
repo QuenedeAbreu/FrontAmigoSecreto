@@ -30,7 +30,7 @@ export const AdminPage = () => {
   const [activePagination, setActivePagination] = useState(false);
   const [search, setSearch] = useState('')
 
-  const loadEvents = async (activePage: number) => {
+  const loadEvents = async (activePage: number, search?: string) => {
     const token = getCookie('token');
     const userTokenDecod = jwtDecode(token as string)
     if (!userTokenDecod) return
@@ -39,8 +39,8 @@ export const AdminPage = () => {
     setModalScreen(null)
     setLoadingSkeleton(true)
     // let teste = activePage === 0 ? 0 : activePage * qtdItensPage
-    const eventsList = await api.getEvents(userTokenJson.id, qtdItensPage, activePage * qtdItensPage)
-    // console.log(eventsList);
+
+    const eventsList = await api.getEvents(userTokenJson.id, search ? search : '', qtdItensPage, activePage * qtdItensPage)
     setLoadingSkeleton(false);
     if (eventsList !== false) {
       const qtdPages = Math.ceil(eventsList.countEvents / qtdItensPage)
@@ -59,8 +59,8 @@ export const AdminPage = () => {
   }
   useEffect(() => {
     setActivePagination(false)
-    loadEvents(0);
-  }, [qtdItensPage])
+    loadEvents(0, search);
+  }, [qtdItensPage, search])
 
   return (
     <div>
@@ -125,6 +125,7 @@ export const AdminPage = () => {
             qtdPages={qtdPage}
             qtdItensPage={qtdItensPage}
             setQtdItemPage={setQtdItemPage}
+            search={search}
           />
         </>
       }

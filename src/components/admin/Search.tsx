@@ -20,7 +20,6 @@ export const SearchDropdown = ({ search, setSearch }: Props) => {
     setIsOpen(false);
   };
   useClickOutside(dropdownRef, closeDropdown);
-
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => {
@@ -32,7 +31,7 @@ export const SearchDropdown = ({ search, setSearch }: Props) => {
   }, [isOpen]);
 
   return (
-    <div className="relative inline-block" ref={dropdownRef}>
+    <div className="z-50 relative inline-block" ref={dropdownRef}>
       <div>
         <button
           type="button"

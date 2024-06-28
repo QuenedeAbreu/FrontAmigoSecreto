@@ -8,12 +8,13 @@ import { Select, Field, Label } from '@headlessui/react'
 import { ItensPagination } from '@/utils/ItensPagination'
 type Props = {
   qtdPages: number,
-  loadEvents: (activePage: number) => void,
+  loadEvents: (activePage: number, search?: string) => void,
   qtdItensPage: number,
   setQtdItemPage: (qtdItensPage: number) => void
+  search: string
 }
 
-export const Pagination = ({ qtdPages, loadEvents, qtdItensPage, setQtdItemPage }: Props) => {
+export const Pagination = ({ qtdPages, loadEvents, qtdItensPage, setQtdItemPage, search }: Props) => {
   const [active, setActive] = useState(1);
   // const [qtdPages, setQtdPages] = useState(50)
   const [itemPagination, setItemPagination] = useState<String[]>([])
@@ -37,7 +38,7 @@ export const Pagination = ({ qtdPages, loadEvents, qtdItensPage, setQtdItemPage 
 
   useEffect(() => {
 
-    loadEvents(active - 1)
+    loadEvents(active - 1, search ? search : '')
     setItemPagination(ItensPagination(active, qtdPages).filter(item => (item !== '')))
     //console.log(ItensPagination(active, qtdPages));
   }, [active])
@@ -58,7 +59,7 @@ export const Pagination = ({ qtdPages, loadEvents, qtdItensPage, setQtdItemPage 
           <option selected={qtdItensPage === 10} value={10}>10</option>
         </Select>
       </Field>
-      <div className="flex flex- items-center justify-between">
+      <div className=" flex flex- items-center justify-between">
         <Button
           variant="text"
           className={`flex items-center gap-2 px-3 py-2 ${active !== 1 ? 'hover:bg-gray-800' : ''}`}
@@ -87,7 +88,7 @@ export const Pagination = ({ qtdPages, loadEvents, qtdItensPage, setQtdItemPage 
 
         <Button
           variant="text"
-          className={`flex items-center gap-2 px-3 py-2 ${active !== qtdPages ? 'hover:bg-gray-800' : ''}`}
+          className={` flex items-center gap-2 px-3 py-2 ${active !== qtdPages ? 'hover:bg-gray-800' : ''}`}
           onClick={next}
           disabled={active === qtdPages}
           placeholder=""

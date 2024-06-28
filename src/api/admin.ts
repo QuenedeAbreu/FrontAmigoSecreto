@@ -35,11 +35,11 @@ export const verifyExistsUser = async () =>{
  }
 
 // Eventos
-export const getEvents = async (id_user:number,take:number,skip:number) =>{
+export const getEvents = async (id_user:number,search:string,take:number,skip:number) =>{
   const token = getCookie('token');
   try {
 
-    const json = await req.get(`/admin/events/user/${id_user}?take=${take}&skip=${skip}`,{
+    const json = await req.get(`/admin/events/user/${id_user}?search=${search}&take=${take}&skip=${skip}`,{
       headers:{
         Authorization: `Bearer ${token}`
       }
