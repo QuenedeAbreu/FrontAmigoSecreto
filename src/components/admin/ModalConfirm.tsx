@@ -85,6 +85,7 @@ export const ModalConfirm = ({ title, description, onConfirm, onCancel, eventTit
                     <span className="flex items-center gap-1">
                       <span className="flex items-center gap-1">
                         <GiConfirmed />
+                        Confirmar
                       </span>
                     </span>
 

@@ -76,11 +76,11 @@ type AddEventData ={
   grouped:boolean,
   id_user?:number
 }
-export const addEvent = async (data: AddEventData): Promise<Event | false | Error > =>{
+export const addEvent = async (id_user:number,data: AddEventData): Promise<Event | false | Error > =>{
   const token = getCookie('token');
   try {
     
-    const json = await req.post('/admin/events',data,{
+    const json = await req.post(`/admin/events/user/${id_user}`,data,{
       headers:{
         Authorization: `Bearer ${token}`
       }

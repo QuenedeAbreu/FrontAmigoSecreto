@@ -14,7 +14,7 @@ import { jwtDecode } from 'jwt-decode'
 import { getCookie } from 'cookies-next'
 import { Pagination } from '@/components/admin/Pagination'
 import { SearchDropdown } from './Search'
-import { Select, Field, Label } from '@headlessui/react'
+
 
 
 export const AdminPage = () => {
@@ -28,7 +28,6 @@ export const AdminPage = () => {
   const [qtdItensPage, setQtdItemPage] = useState(4);
   const [qtdPage, setQtdPage] = useState(1);
   const [activePagination, setActivePagination] = useState(false);
-
   const [search, setSearch] = useState('')
 
   const loadEvents = async (activePage: number) => {
@@ -44,25 +43,24 @@ export const AdminPage = () => {
     // console.log(eventsList);
     setLoadingSkeleton(false);
     if (eventsList !== false) {
-      const qtdPage = Math.ceil(eventsList.countEvents / qtdItensPage)
-      if (qtdPage) setActivePagination(true)
-      setQtdPage(qtdPage)
+      const qtdPages = Math.ceil(eventsList.countEvents / qtdItensPage)
+      if (qtdPages) setActivePagination(true)
+      setQtdPage(qtdPages)
       setEvents(eventsList.events as Event[]);
     } else {
       setEvents([]);
     }
   }
-  useEffect(() => {
-    console.log(search);
-  }, [search])
+
   const editEvent = async (event: Event) => {
     setSelectedEvent(event)
     setModalScreen('edit')
 
   }
   useEffect(() => {
+    setActivePagination(false)
     loadEvents(0);
-  }, [])
+  }, [qtdItensPage])
 
   return (
     <div>
@@ -87,7 +85,7 @@ export const AdminPage = () => {
           <EventItem
             key={item.id}
             item={item}
-            refreshAction={() => loadEvents(1)}
+            refreshAction={() => loadEvents(0)}
             openModal={event => editEvent(event)}
             setPageLoading={setPageLoading}
           />
@@ -105,14 +103,14 @@ export const AdminPage = () => {
         >
           {modalScreen === 'add' &&
             <EventAdd
-              refreshAction={() => loadEvents(1)}
+              refreshAction={() => loadEvents(0)}
               setPageLoading={setPageLoading}
               PageLoading={PageLoading}
             />
           }
           {modalScreen === 'edit' &&
             <EventEdit
-              refreshAction={() => loadEvents(1)}
+              refreshAction={() => loadEvents(0)}
               event={selectedEvent}
               setPageLoading={setPageLoading}
               PageLoading={PageLoading}
@@ -122,22 +120,11 @@ export const AdminPage = () => {
       }
       {activePagination &&
         <>
-          <Field>
-            <Label>Linhas por página:</Label>
-            <Select
-              onChange={(e) => { alert(e.target.value) }}
-              name="qtdlinhas"
-              className="text-center w-11 ml-3 bg-gray-950 rounded border-gray-700 border" aria-label="Quantidade de Registros">
-              <option value={2}>2</option>
-              <option value={4}>4</option>
-              <option value={6}>6</option>
-              <option value={8}>8</option>
-              <option value={10}>10</option>
-            </Select>
-          </Field>
           <Pagination
             loadEvents={loadEvents}
             qtdPages={qtdPage}
+            qtdItensPage={qtdItensPage}
+            setQtdItemPage={setQtdItemPage}
           />
         </>
       }

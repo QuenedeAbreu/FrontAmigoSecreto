@@ -45,11 +45,10 @@ export const EventAdd = ({ refreshAction, setPageLoading, PageLoading }: Props) 
       setPageLoading(false)
       return setErrors(getErrorFromZod(data.error))
     }
-    const eventItem = await api.addEvent({
+    const eventItem = await api.addEvent(userTokenJson.id, {
       title: data.data.titleField,
       description: data.data.descriptionField,
-      grouped: data.data.groupField,
-      id_user: userTokenJson.id
+      grouped: data.data.groupField
     })
     if (eventItem) {
       refreshAction()
