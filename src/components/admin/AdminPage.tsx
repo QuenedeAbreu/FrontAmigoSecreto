@@ -80,6 +80,7 @@ export const AdminPage = () => {
           />
         </div>
       </div>
+
       <div className='my-3 '>
         {!loadingSkeleton && events.length > 0 && events.map(item => (
           <EventItem
