@@ -35,21 +35,6 @@ export const verifyExistsUser = async () =>{
   }
  }
 
- export const getUsers = async () =>{
-  const token = getCookie('token');
-  try {
-    const json = await req.get('/admin/user/',{
-      headers:{
-        Authorization: `Bearer ${token}`
-      }
-    })
-    return json.data.users as User[] ?? [];
-  } catch (error) {
-    console.log(error);
-    return []
-  }
- }
-
 
 
 
@@ -305,12 +290,6 @@ export const deletePerson = async (id:number, groupId:number,EventId:number ) =>
 }
 
 //User
-type User ={
-  id:number,
-  name:string,
-  email:string,
-  is_active:boolean
-}
 export const getUsers = async () =>{
   const token = getCookie('token');
   try {
@@ -322,6 +301,6 @@ export const getUsers = async () =>{
     return json.data.users as User[] ?? [];
   } catch (error) {
     console.log(error);
-    return false
+    return []
   }
 }
