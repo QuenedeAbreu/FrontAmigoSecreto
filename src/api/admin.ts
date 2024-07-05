@@ -3,6 +3,7 @@ import { getCookie } from 'cookies-next';
 import { Event } from '@/types/events'
 import { Group } from '@/types/Group';
 import { PersonComplete } from '@/types/PersonComplete';
+import { User } from '@/types/User'
 
 
 // Uses
@@ -11,7 +12,7 @@ export const login = async (email:string, password:string) =>{
     const json = await req.post('/admin/login',{email,password})
     return json.data ?? false;
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return error
   }
 }
@@ -33,6 +34,24 @@ export const verifyExistsUser = async () =>{
     return false
   }
  }
+
+ export const getUsers = async () =>{
+  const token = getCookie('token');
+  try {
+    const json = await req.get('/admin/user/',{
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return json.data.users as User[] ?? [];
+  } catch (error) {
+    console.log(error);
+    return []
+  }
+ }
+
+
+
 
 // Eventos
 export const getEvents = async (id_user:number,search:string,take:number,skip:number) =>{

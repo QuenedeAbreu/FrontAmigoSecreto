@@ -1,14 +1,29 @@
 "use client"
 import * as api from '@/api/admin'
 import { FullPageLoading } from '@/components/admin/FullPageLoading';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { UserItem, UserItemPlaceholder, UserItemNotFount } from '@/components/admin/user/UserItem'
 import { User } from '@/types/User'
 
 export const UserPage = () => {
   const [users, setUsers] = useState<User[]>([])
   const [PageLoading, setPageLoading] = useState(false);
-  const [loadingSkeleton, setLoadingSkeleton] = useState(false);
+  const [loadingSkeleton, setLoadingSkeleton] = useState(true);
+
+  const loadUsers = async () => {
+    setPageLoading(true);
+    setLoadingSkeleton(true);
+    const usersList = await api.getUsers();
+    setUsers(usersList);
+    setPageLoading(false);
+    setLoadingSkeleton(false);
+  }
+
+  useEffect(() => {
+    loadUsers();
+
+  }, [])
+
   return (
     <div>
       {PageLoading && <FullPageLoading />}
@@ -17,14 +32,14 @@ export const UserPage = () => {
       </div>
       <div className='my-3 '>
         {!loadingSkeleton && users.length > 0 && users.map(item => (
-
-          <UserItem
-          //   key={item.id}
-          //   item={item}
-          //   refreshAction={() => loadEvents(0)}
-          //   openModal={event => editEvent(event)}
-          //   setPageLoading={setPageLoading}
-          />
+          <div key={item.id}>{item.name}</div>
+          // <UserItem
+          // //   key={item.id}
+          // //   item={item}
+          // //   refreshAction={() => loadEvents(0)}
+          // //   openModal={event => editEvent(event)}
+          // //   setPageLoading={setPageLoading}
+          // />
         ))}
 
 
