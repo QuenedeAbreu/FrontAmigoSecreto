@@ -10,7 +10,17 @@ export const UserPage = () => {
   const [PageLoading, setPageLoading] = useState(false);
   const [loadingSkeleton, setLoadingSkeleton] = useState(false);
 
-
+  const loadUsers = async () => {
+    try {
+      setLoadingSkeleton(true)
+      const res = await api.getUsers()
+      setUsers(res)
+    } catch (e) {
+      console.log(e)
+    } finally {
+      setLoadingSkeleton(false)
+    }
+  }
 
   return (
     <div>
