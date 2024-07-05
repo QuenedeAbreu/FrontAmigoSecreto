@@ -284,3 +284,25 @@ export const deletePerson = async (id:number, groupId:number,EventId:number ) =>
     return false
   }
 }
+
+//User
+type User ={
+  id:number,
+  name:string,
+  email:string,
+  is_active:boolean
+}
+export const getUsers = async () =>{
+  const token = getCookie('token');
+  try {
+    const json = await req.get(`/admin/users`,{
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return json.data.users as User[] ?? [];
+  } catch (error) {
+    console.log(error);
+    return false
+  }
+}
