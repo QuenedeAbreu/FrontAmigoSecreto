@@ -1,10 +1,27 @@
 import { useState } from "react"
 import { ModalConfirm } from "../ModalConfirm"
+import { User } from "@/types/User";
+import { ItemButton } from "../ItemButton";
+import { FaLockOpen, FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
+import { FaUserSlash } from "react-icons/fa6";
+import { IoIosWarning } from "react-icons/io";
+import { IoCloseCircle } from "react-icons/io5";
 
-export const UserItem = () => {
+import { LuUserX2, LuUserCheck2 } from "react-icons/lu";
+
+type Props = {
+  item: User;
+  refreshAction: () => void;
+  openModal: (user: User) => void;
+  setPageLoading: (item: boolean) => void;
+}
+
+export const UserItem = ({ item, openModal, refreshAction, setPageLoading }: Props) => {
   const [openAndloseModalErro, setOpenAndloseModalErro] = useState(false)
   const [openAndCloseModalConfirm, setOpenAndCloseModalConfirm] = useState(false);
 
+  const handleEditButton = async () => { }
+  const handleIantiveButton = async () => { }
 
   return (
     <div className='border border-gray-700 rounded p-3 mb-3 flex flex-col items-center md:flex-row'>
@@ -16,7 +33,7 @@ export const UserItem = () => {
           // onConfirm={() => setOpenAndloseModalErro(false)}
           onCancel={() => setOpenAndloseModalErro(false)}
           // eventTitle={item.title}
-          // IconElement={IoCloseCircle}
+          IconElement={IoCloseCircle}
           type="error"
         />
       }
@@ -26,39 +43,39 @@ export const UserItem = () => {
       {/* Modal de Confirmaçãode Exclusão de Evento */}
       {openAndCloseModalConfirm &&
         <ModalConfirm
-          title="Excluir Evento"
-          description="Tem certeza que deseja excluir este evento?"
-          // onConfirm={handleDeleteButton}
+          title="Inativar Usuário"
+          description="Tem certeza que deseja inativar este usuário?"
+          onConfirm={handleIantiveButton}
           onCancel={() => setOpenAndCloseModalConfirm(false)}
           // eventTitle={item.title}
-          // IconElement={IoIosWarning}
+          IconElement={IoIosWarning}
           type="warning"
         />
       }
 
-
+      <div className='flex-1 text-xl md:text-base'> {item.name}</div>
       <div className='flex items-center gap-1 mt-2 md:mt-0'>
 
-        {/* <ItemButton
-    IconElement={FaRegEdit}
-    label="Editar"
-    onClick={handleEditButton}
-  />
-  <ItemButton
-    IconElement={FaRegTrashAlt}
-    label="Excluir"
-    onClick={() => setOpenAndCloseModalConfirm(true)}
-  />
-  {item.status &&
-    <div className='text-sm text-green-500 p-3 flex flex-col justify-center items-center gap-2 md:flex-row'>
-      <FaLockOpen /> Ativo
-    </div>
-  }
-  {!item.status &&
-    <div className='text-sm text-red-500 p-3 flex flex-col justify-center items-center gap-2 md:flex-row'>
-      <HiMiniLockClosed /> Bloqueado
-    </div>
-  } */}
+        <ItemButton
+          IconElement={FaRegEdit}
+          label="Editar"
+          onClick={handleEditButton}
+        />
+        <ItemButton
+          IconElement={FaUserSlash}
+          label="Inativar"
+          onClick={() => setOpenAndCloseModalConfirm(true)}
+        />
+        {item.is_active &&
+          <div className='text-sm text-green-500 p-3 flex flex-col justify-center items-center gap-2 md:flex-row'>
+            <LuUserCheck2 /> Ativo
+          </div>
+        }
+        {!item.is_active &&
+          <div className='text-sm text-red-500 p-3 flex flex-col justify-center items-center gap-2 md:flex-row'>
+            < LuUserX2 /> Inativo
+          </div>
+        }
 
       </div>
     </div>

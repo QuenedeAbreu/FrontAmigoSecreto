@@ -293,7 +293,7 @@ export const deletePerson = async (id:number, groupId:number,EventId:number ) =>
 export const getUsers = async () =>{
   const token = getCookie('token');
   try {
-    const json = await req.get(`/admin/users`,{
+    const json = await req.get(`/admin/user`,{
       headers:{
         Authorization: `Bearer ${token}`
       }

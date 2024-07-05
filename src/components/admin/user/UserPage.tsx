@@ -9,20 +9,22 @@ export const UserPage = () => {
   const [users, setUsers] = useState<User[]>([])
   const [PageLoading, setPageLoading] = useState(false);
   const [loadingSkeleton, setLoadingSkeleton] = useState(true);
-
+  const [selectedUser, setSelectedUser] = useState<User>();
   const loadUsers = async () => {
-    setPageLoading(true);
     setLoadingSkeleton(true);
     const usersList = await api.getUsers();
     setUsers(usersList);
-    setPageLoading(false);
     setLoadingSkeleton(false);
   }
 
   useEffect(() => {
     loadUsers();
-
   }, [])
+
+  const editUser = async (User: User) => {
+    setSelectedUser(User)
+    // setModalScreen('edit')
+  }
 
   return (
     <div>
@@ -32,20 +34,15 @@ export const UserPage = () => {
       </div>
       <div className='my-3 '>
         {!loadingSkeleton && users.length > 0 && users.map(item => (
-          <div key={item.id}>{item.name}</div>
-          // <UserItem
-          // //   key={item.id}
-          // //   item={item}
-          // //   refreshAction={() => loadEvents(0)}
-          // //   openModal={event => editEvent(event)}
-          // //   setPageLoading={setPageLoading}
-          // />
+          // <div key={item.id}>{item.name}</div>
+          <UserItem
+            key={item.id}
+            item={item}
+            refreshAction={() => loadUsers()}
+            openModal={user => editUser(user)}
+            setPageLoading={setPageLoading}
+          />
         ))}
-
-
-
-
-
 
         {!loadingSkeleton && users.length === 0 && < UserItemNotFount />}
         {loadingSkeleton && <>
