@@ -85,11 +85,13 @@ export default function page() {
         {warning && <p className="text-sm text-red-600 border border-dashed border-gray-400 p-3">{warningMessage}</p>}
 
         {existsUser &&
+          // <div onClick={() => { setModalScreen(true) }}>teste</div>
           <Button
             IconElement={IoMdPersonAdd}
             value="Primeiro Usuário"
             onClick={() => { setModalScreen(true) }}
-          />}
+          />
+        }
 
         {modalScreen &&
           <Modal

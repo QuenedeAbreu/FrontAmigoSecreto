@@ -4,12 +4,17 @@ import { FullPageLoading } from '@/components/admin/FullPageLoading';
 import { useEffect, useState } from 'react';
 import { UserItem, UserItemPlaceholder, UserItemNotFount } from '@/components/admin/user/UserItem'
 import { User } from '@/types/User'
+import { ModalScreens } from '@/types/ModalScreens';
+import { Modal } from '@/components/admin/Modal';
+import { UserAdd } from '@/components/admin/user/UserAdd';
+import { UserEdit } from '@/components/admin/user/UserEdit';
 
 export const UserPage = () => {
   const [users, setUsers] = useState<User[]>([])
   const [PageLoading, setPageLoading] = useState(false);
   const [loadingSkeleton, setLoadingSkeleton] = useState(true);
   const [selectedUser, setSelectedUser] = useState<User>();
+  const [modalScreen, setModalScreen] = useState<ModalScreens>(null);
   const loadUsers = async () => {
     setLoadingSkeleton(true);
     const usersList = await api.getUsers();
@@ -23,7 +28,7 @@ export const UserPage = () => {
 
   const editUser = async (User: User) => {
     setSelectedUser(User)
-    // setModalScreen('edit')
+    setModalScreen('edit')
   }
 
   return (
@@ -50,7 +55,27 @@ export const UserPage = () => {
           <UserItemPlaceholder />
         </>}
       </div>
-
+      {modalScreen &&
+        <Modal
+          onClose={() => setModalScreen(null)}
+        >
+          {modalScreen === 'add' &&
+            <UserAdd
+              refreshAction={() => loadUsers()}
+              setPageLoading={setPageLoading}
+              PageLoading={PageLoading}
+            />
+          }
+          {modalScreen === 'edit' && selectedUser &&
+            <UserEdit
+              refreshAction={() => loadUsers()}
+              user={selectedUser}
+              setPageLoading={setPageLoading}
+              PageLoading={PageLoading}
+            />
+          }
+        </Modal>
+      }
 
 
 

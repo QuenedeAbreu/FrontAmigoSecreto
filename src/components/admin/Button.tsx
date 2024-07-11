@@ -1,5 +1,6 @@
 import { IconType } from "react-icons";
 
+
 type Props = {
   value: any;
   onClick: () => void;
@@ -9,9 +10,13 @@ type Props = {
 
 
 export const Button = ({ value, onClick, IconElement, disabled }: Props) => {
+  const onClickHandler = (e: any) => {
+    e.preventDefault();
+    onClick();
+  };
   return (
     <button
-      onClick={onClick}
+      onClick={onClickHandler}
       disabled={disabled}
       className="w-full my-3 p-3 rounded flex justify-center items-center
       bg-gray-700 text-white uppercase font-bold

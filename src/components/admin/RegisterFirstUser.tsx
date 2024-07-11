@@ -90,7 +90,7 @@ export const RegisterFirstUser = ({ setModalScreen, setExistsUser }: Props) => {
 
       {/* Inputs */}
       <div className="mb-5 flex flex-col items-start">
-        <label>Usuário</label>
+        <label>Nome</label>
         <InputField
           value={nomeUserField}
           onChange={(e) => setNomeUserField(e.target.value)}
@@ -112,6 +112,7 @@ export const RegisterFirstUser = ({ setModalScreen, setExistsUser }: Props) => {
         <label>Senha</label>
         <InputField
           value={passwordField}
+          type="password"
           onChange={(e) => setPasswordField(e.target.value)}
           placeholder="Digite a senha do usuário"
           errorMessage={errors.find(error => error.field === 'passwordField')?.message}

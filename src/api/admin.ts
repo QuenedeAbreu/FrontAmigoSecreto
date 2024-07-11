@@ -53,7 +53,7 @@ export const getEvents = async (id_user:number,search:string,take:number,skip:nu
       countEvents:json.data.events.countEvents as number
     };
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return false
   }
 }
@@ -69,7 +69,7 @@ export const getOneEvent = async (id: number) =>{
     })
     return json.data.event as Event;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return false
   }
 }
@@ -91,7 +91,7 @@ export const addEvent = async (id_user:number,data: AddEventData): Promise<Event
     })
     return json.data.event as Event ?? false;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return false
   }
 }
@@ -113,7 +113,7 @@ export const updateEvent = async ( id:number, data: UpdateEventData): Promise<Ev
     })
     return json.data.event as Event ?? false;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return false
   }
 }
@@ -128,7 +128,7 @@ export const deleteEvent = async (id:number) =>{
     })
     return !json.data.error;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return false
   }
 }
@@ -144,7 +144,7 @@ export const getGroups = async (eventId:number): Promise<Group[] | false> =>{
     })
     return json.data.groups as Group[] ?? [];
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return false
   }
 }
@@ -162,7 +162,7 @@ export const addGroup = async (eventId:number, data:AddGroupData): Promise<Group
       })
       return json.data.group as Group ?? false;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return false
     }
 }
@@ -180,7 +180,7 @@ export const updateGroup = async (id:number,eventId:number, data:UpdateroupData)
       })
       return json.data.group as Group ?? false;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return false
     }
 }
@@ -194,7 +194,7 @@ export const deleteGroup = async (id:number, eventId:number) =>{
     })
     return !json.data.error;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return false
   }
 }
@@ -210,7 +210,7 @@ export const getPeople = async (eventId: number,groupId:number) =>{
     })
     return json.data.peoples as PersonComplete[] ?? [];
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return false
   }
 }
@@ -240,7 +240,7 @@ export const addPerson = async (EventId:number,groupId:number,data:AddPersonData
       })
       return json.data as PersonComplete ?? false;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return false
     }
 }
@@ -269,7 +269,7 @@ export const updatePerson = async (id:number,groupId:number,EventId:number,data:
       })
       return json.data.peopleItem as PersonComplete ?? false;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return false
     }
 }
@@ -290,6 +290,7 @@ export const deletePerson = async (id:number, groupId:number,EventId:number ) =>
 }
 
 //User
+// Busca todos os usuarios 
 export const getUsers = async () =>{
   const token = getCookie('token');
   try {
@@ -300,7 +301,27 @@ export const getUsers = async () =>{
     })
     return json.data.users as User[] ?? [];
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return []
   }
 }
+
+//Alter status user 
+export const updateStatusUser = async (id:number,status:boolean) =>{
+  const token = getCookie('token');
+  try {
+    const json = await req.put(`/admin/user/${id}/status`,{
+      is_active:status
+    },{
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return !json.data.error;
+  } catch (error) {
+    // console.log(error);
+    return false
+  }
+}
+
+//Delete user
