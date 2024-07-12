@@ -15,6 +15,7 @@ export const UserPage = () => {
   const [loadingSkeleton, setLoadingSkeleton] = useState(true);
   const [selectedUser, setSelectedUser] = useState<User>();
   const [modalScreen, setModalScreen] = useState<ModalScreens>(null);
+
   const loadUsers = async () => {
     setLoadingSkeleton(true);
     const usersList = await api.getUsers();
