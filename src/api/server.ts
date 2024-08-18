@@ -14,7 +14,7 @@ export const isTokenValid = async () =>{
 
     return true;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return false;
   }
 }

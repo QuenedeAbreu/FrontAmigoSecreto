@@ -48,6 +48,7 @@ export default function page() {
         setWarning(true)
         setWarningMessage(json.response.data.message)
       } else {
+        // console.log(json.user);
         setUserOne(json.user)
         setCookie('user', json.user)
         setCookie('token', json.token)

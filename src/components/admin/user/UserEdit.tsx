@@ -1,10 +1,18 @@
 import { User } from '@/types/User'
+import * as api from '@/api/admin'
 import { InputField } from '@/components/admin/inputField'
 import { useEffect, useState } from 'react'
 import { ErrorItem, getErrorFromZod } from '@/utils/getErrorFromZod'
 import { z } from 'zod'
 import { Button } from '../Button'
 import { IoIosSave } from 'react-icons/io'
+import { SiMinutemailer } from "react-icons/si";
+import { ModalConfirm } from '../ModalConfirm'
+import { IoCloseCircle } from 'react-icons/io5'
+import { FaRegCircleCheck } from 'react-icons/fa6'
+import { TbMailCancel } from 'react-icons/tb'
+import { RiMailSendLine } from 'react-icons/ri'
+
 
 type Props = {
   user: User,
@@ -17,10 +25,18 @@ type Props = {
 export const UserEdit = ({ user, refreshAction, setPageLoading, PageLoading }: Props) => {
   const [nameField, setNameField] = useState(user.name)
   const [emailField, setEmailField] = useState(user.email)
-  const [passwordField, setPasswordField] = useState('')
+  // const [passwordField, setPasswordField] = useState('')
 
   const [isAdminField, setIsAdminFieldField] = useState(user.is_admin)
   const [isActivedField, setIsActivedField] = useState(user.is_active)
+
+  const [loadSendMailPassWord, setLoadSendMailPassWord] = useState(false)
+
+  const [openAndCloseModalConfirm, setOpenAndCloseModalConfirm] = useState(false);
+  const [openAndloseModalErro, setOpenAndloseModalErro] = useState(false);
+
+  const [openAndCloseModalConfirmEmail, setOpenAndCloseModalConfirmEmail] = useState(false);
+  const [openAndloseModalErroEmail, setOpenAndloseModalErroEmail] = useState(false);
 
   const [errors, setErrors] = useState<ErrorItem[]>([]);
 
@@ -41,17 +57,95 @@ export const UserEdit = ({ user, refreshAction, setPageLoading, PageLoading }: P
   useEffect(() => {
     setErrors([])
   }, [])
+  //Editar usuario
   const handleSaveButton = async () => {
     if (errors.length > 0) return;
     setPageLoading(true);
-    setInterval(() => {
+    const editUser = await api.updateUser(user.id, { name: nameField, email: emailField, is_admin: isAdminField, is_active: isActivedField })
+
+    if (editUser) {
+      setOpenAndCloseModalConfirm(true)
+      refreshAction();
       setPageLoading(false);
-    }, 5000)
+    } else {
+      setPageLoading(false);
+      setOpenAndloseModalErro(true)
+    }
 
   }
+  const handleSendMailResetPassWord = async () => {
+    setPageLoading(true);
+    setLoadSendMailPassWord(true);
+    const sendMail = await api.sendMailResetPassWord(user.id)
+    if (sendMail) {
+      setPageLoading(false)
+      setLoadSendMailPassWord(false)
+      setOpenAndCloseModalConfirmEmail(true)
+    } else {
+      setPageLoading(false)
+      setLoadSendMailPassWord(false)
+      setOpenAndloseModalErroEmail(true)
+    }
+    // setInterval(() => {
+    //   setPageLoading(false);
+    //   setLoadSendMailPassWord(false);
+    // }, 5000)
+  }
+
 
   return (
     <div>
+      {/* Modal de confirmação de Edição de usuário*/}
+      {openAndCloseModalConfirm &&
+        <ModalConfirm
+          title="Edição de Usuário"
+          description="Usuário editado com sucesso!"
+          // onConfirm={() => setOpenAndloseModalErro(false)}
+          onCancel={() => setOpenAndCloseModalConfirm(false)}
+          eventTitle={user.name}
+          IconElement={FaRegCircleCheck}
+          type="success"
+        />
+      }
+
+      {/* Modal de Erro de Edição de usuário*/}
+      {openAndloseModalErro &&
+        <ModalConfirm
+          title="Editar Usuário"
+          description="Erro ao editar este usuário!"
+          // onConfirm={handleDeleteButton}
+          onCancel={() => setOpenAndloseModalErro(false)}
+          eventTitle={user.name}
+          IconElement={IoCloseCircle}
+          type="error"
+        />
+      }
+
+      {/* Modal de confirmação de envio de email */}
+      {openAndCloseModalConfirmEmail &&
+        <ModalConfirm
+          title="Envio de Email"
+          description="Email de troca de senha foi enviado com sucesso!"
+          // onConfirm={() => setOpenAndloseModalErro(false)}
+          onCancel={() => setOpenAndCloseModalConfirmEmail(false)}
+          eventTitle={user.name}
+          IconElement={RiMailSendLine}
+          type="success"
+        />
+      }
+
+      {/* Modal de Erro de envio de email */}
+      {openAndloseModalErroEmail &&
+        <ModalConfirm
+          title="Envio de Email"
+          description="Erro ao enviar email de troca de senha!"
+          // onConfirm={handleDeleteButton}
+          onCancel={() => setOpenAndloseModalErroEmail(false)}
+          eventTitle={user.name}
+          IconElement={TbMailCancel}
+          type="error"
+        />
+      }
       <div className="mb-5">
         <label>Nome</label>
         <InputField
@@ -71,14 +165,21 @@ export const UserEdit = ({ user, refreshAction, setPageLoading, PageLoading }: P
         />
       </div>
       <div className="mb-5">
-        <label>Senha</label>
+        {/* <label>Senha</label>
+
         <InputField
           value={passwordField}
           onChange={(e) => setPasswordField(e.target.value)}
           placeholder="Digite a senha do usuário"
           type='password'
           errorMessage={errors.find(error => error.field === 'passwordField')?.message}
-        />
+        /> */}
+        <Button
+          value={loadSendMailPassWord ? <div><i className="pi pi-spin pi-spinner" style={{ fontSize: '1rem' }}></i> Enviando senha...</div> : 'Enviar Nova Senha'}
+          onClick={handleSendMailResetPassWord}
+          IconElement={SiMinutemailer}
+          disabled={loadSendMailPassWord}
+        ></Button>
       </div>
       <div className='flex mb-5'>
         <div className='flex-1 '>
@@ -105,7 +206,7 @@ export const UserEdit = ({ user, refreshAction, setPageLoading, PageLoading }: P
       </div>
       <div>
         <Button
-          value={PageLoading ? <div><i className="pi pi-spin pi-spinner" style={{ fontSize: '1rem' }}></i> Salvando...</div> : 'Salvar'}
+          value={PageLoading && !loadSendMailPassWord ? <div><i className="pi pi-spin pi-spinner" style={{ fontSize: '1rem' }}></i> Salvando...</div> : 'Salvar'}
           onClick={handleSaveButton}
           IconElement={IoIosSave}
           disabled={PageLoading}

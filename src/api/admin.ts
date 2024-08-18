@@ -284,12 +284,18 @@ export const deletePerson = async (id:number, groupId:number,EventId:number ) =>
     })
     return !json.data.error;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return false
   }
 }
 
 //User
+type UpdateUser={
+    name?:string
+    email?: string
+    is_admin?: boolean
+    is_active?: boolean
+}
 // Busca todos os usuarios 
 export const getUsers = async () =>{
   const token = getCookie('token');
@@ -324,4 +330,52 @@ export const updateStatusUser = async (id:number,status:boolean) =>{
   }
 }
 
+// Update user
+export const updateUser = async (id:number, data:UpdateUser) =>{
+  const token = getCookie('token');
+  try {
+    const json = await req.put(`/admin/user/${id}`,data,{
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return json.data.user as User ?? false;
+  } catch (error) {
+    // console.log(error);
+    return false
+  }
+}
+
+// Enviar email de reste de senha do usuario
+export const sendMailResetPassWord = async (id_user:number) =>{
+  const token = getCookie('token');
+  try {
+    const json = await req.post(`/admin/user/forgotpassword/${id_user}`,{},{
+      
+        headers:{
+          Authorization: `Bearer ${token}`
+        
+      }
+    })
+    return !json.data.error;
+  } catch (error) {
+    console.log(error);
+    return false
+  }
+}
+
+
+// varify token reset password
+export const verifyTokenResetPasswordAndUpdatePasseword = async (token:string, newpassword?:string) =>{
+  try {
+    const json = await req.post(`/admin/user/resetpassword/${token}`,{
+      password:newpassword
+    })
+    // console.log(json);
+    return !json.data.error;
+  } catch (error) {
+    // console.log(error);
+    return false
+  }
+}
 //Delete user

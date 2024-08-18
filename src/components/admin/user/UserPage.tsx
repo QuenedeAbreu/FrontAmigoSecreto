@@ -9,12 +9,17 @@ import { Modal } from '@/components/admin/Modal';
 import { UserAdd } from '@/components/admin/user/UserAdd';
 import { UserEdit } from '@/components/admin/user/UserEdit';
 
+
+
 export const UserPage = () => {
+
   const [users, setUsers] = useState<User[]>([])
   const [PageLoading, setPageLoading] = useState(false);
   const [loadingSkeleton, setLoadingSkeleton] = useState(true);
   const [selectedUser, setSelectedUser] = useState<User>();
   const [modalScreen, setModalScreen] = useState<ModalScreens>(null);
+
+
 
   const loadUsers = async () => {
     setLoadingSkeleton(true);
@@ -77,10 +82,6 @@ export const UserPage = () => {
           }
         </Modal>
       }
-
-
-
-
     </div>
   )
 }
