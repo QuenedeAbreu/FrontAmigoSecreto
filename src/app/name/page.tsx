@@ -1,7 +1,7 @@
 
 import * as api from '@/api/server'
 import { redirect } from 'next/navigation';
-import { UserPage } from '@/components/admin/user/UserPage'
+import { NamePage } from '@/app/name/NamePage'
 
 
 export default async function page() {
@@ -11,5 +11,5 @@ export default async function page() {
   if (!logged) return redirect('/admin/login');
   if (!logged.admin) return redirect('/admin');
 
-  return <UserPage />
+  return <NamePage />
 }
