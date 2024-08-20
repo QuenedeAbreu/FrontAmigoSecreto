@@ -25,7 +25,7 @@ export const verifyExistsUser = async () =>{
     return false
   }
 }
- export const firstRegister = async (name:string,email:string, password:string) =>{
+export const firstRegister = async (name:string,email:string, password:string) =>{
   try {
     const json = await req.post('/admin/firstregister/',{name,email, password})
     return json.data ?? false;
@@ -34,9 +34,6 @@ export const verifyExistsUser = async () =>{
     return false
   }
  }
-
-
-
 
 // Eventos
 export const getEvents = async (id_user:number,search:string,take:number,skip:number) =>{
@@ -290,11 +287,13 @@ export const deletePerson = async (id:number, groupId:number,EventId:number ) =>
 }
 
 //User
-type UpdateUser={
-    name?:string
-    email?: string
-    is_admin?: boolean
-    is_active?: boolean
+type CreatedUser={
+  name:string
+  email: string
+  password:String,
+  is_acessall?:boolean
+  is_admin?: boolean
+  is_active?: boolean
 }
 // Busca todos os usuarios 
 export const getUsers = async () =>{
@@ -309,6 +308,22 @@ export const getUsers = async () =>{
   } catch (error) {
     // console.log(error);
     return []
+  }
+}
+// adicionar um usuário novo
+export const createdUser = async (data:CreatedUser) =>{
+  const token = getCookie('token');
+  try {
+    const json = await req.post(`/admin/register`,data,{
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    })
+    // console.log(json);
+    return json.data.user as User ?? false;
+  } catch (error) {
+    // console.log(error);
+    return false
   }
 }
 
@@ -330,6 +345,13 @@ export const updateStatusUser = async (id:number,status:boolean) =>{
   }
 }
 
+type UpdateUser={
+  name?:string
+  email?: string,
+  is_acessall?:boolean
+  is_admin?: boolean
+  is_active?: boolean
+}
 // Update user
 export const updateUser = async (id:number, data:UpdateUser) =>{
   const token = getCookie('token');

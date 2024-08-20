@@ -47,6 +47,9 @@ export default function page() {
       if (!json.token) {
         setWarning(true)
         setWarningMessage(json.response.data.message)
+      } else if (json.is_acessall === false) {
+        setWarning(true)
+        setWarningMessage(json.response.data.message)
       } else {
         // console.log(json.user);
         setUserOne(json.user)

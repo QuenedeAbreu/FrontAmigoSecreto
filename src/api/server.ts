@@ -2,10 +2,10 @@ import { getCookie } from "cookies-next";
 import { cookies } from "next/headers";
 import {req} from './axios';
 
-type IsTokenValid = {
-  isTokenValid: boolean;
-  admin: boolean;
-};
+// type IsTokenValid = {
+//   isTokenValid: boolean;
+//   admin: boolean;
+// };
 export const isTokenValid = async () =>{
   try {
     const token = getCookie('token',{cookies});

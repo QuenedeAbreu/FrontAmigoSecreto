@@ -8,6 +8,8 @@ import { ModalScreens } from '@/types/ModalScreens';
 import { Modal } from '@/components/admin/Modal';
 import { UserAdd } from '@/components/admin/user/UserAdd';
 import { UserEdit } from '@/components/admin/user/UserEdit';
+import { ItemButton } from '../ItemButton';
+import { FaPlus } from 'react-icons/fa';
 
 
 
@@ -42,6 +44,12 @@ export const UserPage = () => {
       {PageLoading && <FullPageLoading />}
       <div className='p-3 flex items-center' >
         <h1 className='text-2xl flex-1'>Usuários</h1>
+        <div>
+          <ItemButton
+            IconElement={FaPlus}
+            onClick={() => setModalScreen('add')}
+          />
+        </div>
       </div>
       <div className='my-3 '>
         {!loadingSkeleton && users.length > 0 && users.map(item => (
@@ -70,6 +78,7 @@ export const UserPage = () => {
               refreshAction={() => loadUsers()}
               setPageLoading={setPageLoading}
               PageLoading={PageLoading}
+              closeModal={async () => setModalScreen(null)}
             />
           }
           {modalScreen === 'edit' && selectedUser &&

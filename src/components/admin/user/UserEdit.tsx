@@ -29,7 +29,7 @@ export const UserEdit = ({ user, refreshAction, setPageLoading, PageLoading }: P
 
   const [isAdminField, setIsAdminFieldField] = useState(user.is_admin)
   const [isActivedField, setIsActivedField] = useState(user.is_active)
-
+  const [isAcessAll, setIsAcessAll] = useState(user.is_acessall)
   const [loadSendMailPassWord, setLoadSendMailPassWord] = useState(false)
 
   const [openAndCloseModalConfirm, setOpenAndCloseModalConfirm] = useState(false);
@@ -52,7 +52,7 @@ export const UserEdit = ({ user, refreshAction, setPageLoading, PageLoading }: P
     setErrors([])
     const data = personSchema.safeParse({ nameField, emailField, isAdminField, isActivedField })
     if (!data.success) return setErrors(getErrorFromZod(data.error))
-  }, [nameField, emailField, isAdminField, isActivedField])
+  }, [nameField, emailField, isAdminField, isActivedField, isAcessAll])
 
   useEffect(() => {
     setErrors([])
@@ -61,7 +61,7 @@ export const UserEdit = ({ user, refreshAction, setPageLoading, PageLoading }: P
   const handleSaveButton = async () => {
     if (errors.length > 0) return;
     setPageLoading(true);
-    const editUser = await api.updateUser(user.id, { name: nameField, email: emailField, is_admin: isAdminField, is_active: isActivedField })
+    const editUser = await api.updateUser(user.id, { name: nameField, email: emailField, is_acessall: isAcessAll, is_admin: isAdminField, is_active: isActivedField })
 
     if (editUser) {
       setOpenAndCloseModalConfirm(true)
@@ -182,7 +182,7 @@ export const UserEdit = ({ user, refreshAction, setPageLoading, PageLoading }: P
         ></Button>
       </div>
       <div className='flex mb-5'>
-        <div className='flex-1 '>
+        <div className='flex flex-col flex-1 items-center justify-center'>
           <label>É administrador?</label>
           <input
             type='checkbox'
@@ -192,12 +192,22 @@ export const UserEdit = ({ user, refreshAction, setPageLoading, PageLoading }: P
             disabled={PageLoading}
           />
         </div>
-        <div className='flex-1 '>
+        <div className='flex flex-col flex-1 items-center justify-center'>
           <label>Ativo?</label>
           <input
             type='checkbox'
             checked={isActivedField}
             onChange={e => setIsActivedField(!isActivedField)}
+            className='block w-5 h-5 mt-3'
+            disabled={PageLoading}
+          />
+        </div>
+        <div className=' flex flex-col flex-1 items-center justify-center'>
+          <label>Acesso à todos sistemas?</label>
+          <input
+            type='checkbox'
+            checked={isAcessAll}
+            onChange={e => setIsAcessAll(!isAcessAll)}
             className='block w-5 h-5 mt-3'
             disabled={PageLoading}
           />
