@@ -16,6 +16,15 @@ export const login = async (email:string, password:string) =>{
     return error
   }
 }
+export const loginFromToken = async (token:string) =>{
+  try {
+    const json = await req.post(`/admin/logintokenname/${token}`)
+    return json.data ?? false;
+  } catch (error) {
+    //console.log(error);
+    return error
+  }
+}
 export const verifyExistsUser = async () =>{
   try {
     const json = await req.get('/admin/verifyexistsuser/')
