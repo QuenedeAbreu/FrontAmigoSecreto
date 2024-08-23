@@ -4,6 +4,7 @@ import { Event } from '@/types/events'
 import { Group } from '@/types/Group';
 import { PersonComplete } from '@/types/PersonComplete';
 import { User } from '@/types/User'
+import {Name} from '@/types/Name'
 
 
 // Uses
@@ -410,3 +411,20 @@ export const verifyTokenResetPasswordAndUpdatePasseword = async (token:string, n
   }
 }
 //Delete user
+
+// Busca todos os nomes 
+export const getNames = async () =>{
+  const token = getCookie('token');
+  try {
+    const json = await req.get(`/admin/namekid`,{
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return json.data.names as Name[] ?? [];
+  } catch (error) {
+    // console.log(error);
+    return []
+  }
+}
+

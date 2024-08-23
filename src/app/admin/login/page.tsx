@@ -8,11 +8,11 @@ import * as api from '@/api/admin'
 import { setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { BiLogIn } from "react-icons/bi";
-import { ItemButton } from "@/components/admin/ItemButton";
 import { IoMdPersonAdd } from "react-icons/io";
 import { Modal } from "@/components/admin/Modal";
 import { RegisterFirstUser } from '@/components/admin/RegisterFirstUser'
 import { useGlobalContext } from '@/provider/globlalProvider'
+import { BgAnimated } from "@/components/admin/BgAnimated";
 
 
 export default function page() {
@@ -108,6 +108,7 @@ export default function page() {
           </Modal>
         }
       </form>
+      <BgAnimated />
     </div>
   )
 }	

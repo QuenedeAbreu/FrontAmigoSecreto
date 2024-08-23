@@ -2,48 +2,61 @@
 import * as api from '@/api/admin'
 import { FullPageLoading } from '@/components/admin/FullPageLoading';
 import { useEffect, useState } from 'react';
-import { UserItem, UserItemPlaceholder, UserItemNotFount } from '@/components/admin/user/UserItem'
-import { User } from '@/types/User'
+import { NameItem, NameItemPlaceholder, NameItemNotFount } from '@/components/name/NameItem'
+import { Name } from '@/types/Name'
 import { ModalScreens } from '@/types/ModalScreens';
 import { Modal } from '@/components/admin/Modal';
-import { UserAdd } from '@/components/admin/user/UserAdd';
-import { UserEdit } from '@/components/admin/user/UserEdit';
+import { NameAdd } from '@/components/name/NameAdd';
+// import { UserEdit } from '@/components/admin/user/UserEdit';
 import { ItemButton } from '@/components/admin/ItemButton';
 import { FaPlus } from 'react-icons/fa';
+import { useGlobalContext } from "@/provider/globlalProvider";
+import { getCookie } from 'cookies-next';
 
 
 
 export const NamePage = () => {
 
-  const [users, setUsers] = useState<User[]>([])
+  const [names, setNames] = useState<Name[]>([])
   const [PageLoading, setPageLoading] = useState(false);
   const [loadingSkeleton, setLoadingSkeleton] = useState(true);
-  const [selectedUser, setSelectedUser] = useState<User>();
+  const [selectedName, setSelectedName] = useState<Name>();
   const [modalScreen, setModalScreen] = useState<ModalScreens>(null);
+  const { userOne, setUserOne } = useGlobalContext()
 
+  const cookiesUser = getCookie('user');
 
+  useEffect(() => {
+    if (cookiesUser) {
+      setUserOne(cookiesUser ? JSON.parse(cookiesUser as string) : null)
+    }
+  }, [cookiesUser])
 
-  const loadUsers = async () => {
+  const loadNomes = async () => {
     setLoadingSkeleton(true);
-    const usersList = await api.getUsers();
-    setUsers(usersList);
+    const usersList = await api.getNames();
+    console.log(usersList);
+    setNames(usersList);
     setLoadingSkeleton(false);
   }
 
   useEffect(() => {
-    loadUsers();
+    loadNomes();
   }, [])
 
-  const editUser = async (User: User) => {
-    setSelectedUser(User)
+  const editUser = async (Name: Name) => {
+    setSelectedName(Name)
     setModalScreen('edit')
   }
 
   return (
-    <div>
+    <div className='mx-auto w-full max-w-3xl p-3'>
       {PageLoading && <FullPageLoading />}
       <div className='p-3 flex items-center' >
-        <h1 className='text-2xl flex-1'>Usuários</h1>
+        <div className='flex-1'>
+          <h1 className='text-2xl flex-1'>Nomes Sugeridos</h1>
+          <h6 className='flex-1 text-sm font-semibold'>Bem vindo: {userOne?.name}</h6>
+        </div>
         <div>
           <ItemButton
             IconElement={FaPlus}
@@ -52,21 +65,20 @@ export const NamePage = () => {
         </div>
       </div>
       <div className='my-3 '>
-        {!loadingSkeleton && users.length > 0 && users.map(item => (
-          // <div key={item.id}>{item.name}</div>
-          <UserItem
+        {!loadingSkeleton && names.length > 0 && names.map(item => (
+          <NameItem
             key={item.id}
             item={item}
-            refreshAction={() => loadUsers()}
-            openModal={user => editUser(user)}
+            refreshAction={() => loadNomes()}
+            openModal={name => editUser(name)}
             setPageLoading={setPageLoading}
           />
         ))}
 
-        {!loadingSkeleton && users.length === 0 && < UserItemNotFount />}
+        {!loadingSkeleton && names.length === 0 && < NameItemNotFount />}
         {loadingSkeleton && <>
-          <UserItemPlaceholder />
-          <UserItemPlaceholder />
+          <NameItemPlaceholder />
+          <NameItemPlaceholder />
         </>}
       </div>
       {modalScreen &&
@@ -74,20 +86,22 @@ export const NamePage = () => {
           onClose={() => setModalScreen(null)}
         >
           {modalScreen === 'add' &&
-            <UserAdd
-              refreshAction={() => loadUsers()}
+
+            <NameAdd
+              refreshAction={() => loadNomes()}
               setPageLoading={setPageLoading}
               PageLoading={PageLoading}
               closeModal={async () => setModalScreen(null)}
             />
           }
-          {modalScreen === 'edit' && selectedUser &&
-            <UserEdit
-              refreshAction={() => loadUsers()}
-              user={selectedUser}
-              setPageLoading={setPageLoading}
-              PageLoading={PageLoading}
-            />
+          {modalScreen === 'edit' && selectedName &&
+            <>{userOne?.name}</>
+            // <UserEdit
+            //   refreshAction={() => loadNomes()}
+            //   user={selectedName}
+            //   setPageLoading={setPageLoading}
+            //   PageLoading={PageLoading}
+            // />
           }
         </Modal>
       }

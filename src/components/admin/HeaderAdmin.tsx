@@ -32,16 +32,18 @@ export const HeaderAdmin = () => {
         <h3 className="text-3xl">Amigo Secreto</h3>
         <h4 className="text-base">Painel de Controle</h4>
       </div>
-      <div className="md:flex justify-center items-center gap-5">
-        {userOne && <p className="text-sm">Bem-vindo, {userOne?.name}</p>}
-        {userOne && <a onClick={handleLogout} className="">
-          <ItemButton
-            IconElement={IoMdExit}
-            label="Sair"
-            onClick={() => { }}
-            type="link"
-          /></a>}
-      </div>
+      {userOne?.is_acessall === true &&
+        <div className="md:flex justify-center items-center gap-5">
+          {userOne && <p className="text-sm">Bem-vindo, {userOne?.name}</p>}
+          {userOne && <a onClick={handleLogout} className="">
+            <ItemButton
+              IconElement={IoMdExit}
+              label="Sair"
+              onClick={() => { }}
+              type="link"
+            /></a>}
+        </div>
+      }
     </header>
   )
 }
