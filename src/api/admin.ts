@@ -465,3 +465,17 @@ export const editName = async (id_user:number,id:number, data:createdName) =>{
 }
 
 //Deletar um nome
+export const deleteName = async (id:number, id_user:number) =>{
+  const token = getCookie('token');
+  try {
+    const json = await req.delete(`/admin/namekid/${id}/user/${id_user}`,{
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return !json.data.error;
+  } catch (error) {
+    console.log(error);
+    return false
+  }
+}

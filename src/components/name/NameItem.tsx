@@ -6,11 +6,11 @@ import { FaRegEdit } from "react-icons/fa";
 import { FaUserSlash, FaUserCheck, FaChild, FaChildDress } from "react-icons/fa6";
 import { IoIosWarning } from "react-icons/io";
 import { IoCloseCircle } from "react-icons/io5";
-
 import { useGlobalContext } from "@/provider/globlalProvider";
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import * as api from "@/api/admin"
 import { getCookie } from "cookies-next";
+import { jwtDecode } from "jwt-decode";
 
 type Props = {
   item: Name;
@@ -28,8 +28,23 @@ export const NameItem = ({ item, openModal, refreshAction, setPageLoading }: Pro
   const [openAndCloseModalConfirm, setOpenAndCloseModalConfirm] = useState(false);
   const { userOne, setUserOne } = useGlobalContext()
   const handleEditButton = async () => { openModal(item) }
+  const token = getCookie('token');
+  const userTokenDecod = jwtDecode(token as string)
+  if (!userTokenDecod) return
+  const userTokenDecodString = JSON.stringify(userTokenDecod)
+  const userTokenJson = JSON.parse(userTokenDecodString)
 
-
+  const handleDeleteButton = async () => {
+    setPageLoading(true)
+    const resultPersonDelete = await api.deleteName(item.id, userTokenJson.id)
+    if (resultPersonDelete) {
+      refreshAction()
+      setPageLoading(false)
+    } else {
+      setPageLoading(false)
+      setOpenAndloseModalErro(true)
+    }
+  }
   const userJwt = jwt.decode(getCookie('token') as string) as IJwtPayload;
 
   return (
@@ -51,8 +66,8 @@ export const NameItem = ({ item, openModal, refreshAction, setPageLoading }: Pro
       {openAndCloseModalConfirm &&
         <ModalConfirm
           title="Excluir Nome"
-          description="Tem certeza que deseja excluir este nome?"
-          onConfirm={() => { }}
+          description={`Tem certeza que deseja excluir este nome? ${item.suggested_name}`}
+          onConfirm={handleDeleteButton}
           onCancel={() => setOpenAndCloseModalConfirm(false)}
           // eventTitle={item.title}
           IconElement={IoIosWarning}
