@@ -8,7 +8,7 @@ import { Button } from '@/components/admin/Button'
 import { IoIosSave } from 'react-icons/io'
 import { ModalConfirm } from '@/components/admin/ModalConfirm'
 import { IoCloseCircle } from 'react-icons/io5'
-import { FaAndroid, FaApple, FaChild, FaRegCircleCheck, FaWindows } from 'react-icons/fa6'
+import { FaAndroid, FaApple, FaChild, FaChildDress, FaRegCircleCheck, FaWindows } from 'react-icons/fa6'
 import { SelectWithIcons } from '@/components/admin/SelectWithIcons'
 import { SingleValue, MultiValue, ActionMeta } from 'react-select';
 
@@ -29,8 +29,8 @@ export const NameAdd = ({ refreshAction, setPageLoading, PageLoading, closeModal
   const [openAndloseModalErro, setOpenAndloseModalErro] = useState(false);
   const [errors, setErrors] = useState<ErrorItem[]>([]);
   const options = [
-    { value: 0, label: 'Menino', icon: <FaChild /> },
-    { value: 1, label: 'Menina', icon: <FaAndroid /> },
+    { value: '0', label: 'Menino', icon: <FaChild className='text-blue-500' /> },
+    { value: '1', label: 'Menina', icon: <FaChildDress className='text-pink-500' /> },
   ];
   type OptionType = {
     value: string;
@@ -118,14 +118,14 @@ export const NameAdd = ({ refreshAction, setPageLoading, PageLoading, closeModal
       </div>
       <div className="mb-5">
         <label>Sexo</label>
-        <select
+        {/* <select
           onChange={e => setSexField(parseInt(e.target.value))}
           className='w-full rounded bg-gray-900  text-white text-xl p-3 outline-none'
         >
           <option className='bg-gray-800' value={0}><FaChild /> Menina</option>
           <option selected className='bg-gray-800' value={1}><FaChild /> Menino</option>
 
-        </select>
+        </select> */}
         <SelectWithIcons options={options} onChange={handleChangeSelect} />
       </div>
       <div className="mb-5">

@@ -43,8 +43,13 @@ const customStyles = {
     backgroundColor: 'rgb(17 24 39 / var(--tw-bg-opacity))', // bg-gray-900
     boxShadow: 'none',
     color: 'white', // Define a cor do texto no input
+    width: '100%',
+    borderRadius: '5px',
+    outline: 'none',
+    borderColor: 'transparent',
+    padding: '0.75rem',
     '&:hover': {
-      borderColor: 'transparent',
+
     },
     '& input': {
       color: 'white !important', // Cor do texto do input
@@ -78,6 +83,7 @@ export const SelectWithIcons: React.FC<SelectWithIconsProps> = ({ options, onCha
       onChange={onChange}
       styles={customStyles}
       noOptionsMessage={() => 'Nenhuma opção disponível'} // Mensagem quando não há opções
+      placeholder="Selecione um nome"
       classNamePrefix="react-select" // Isso permite usar Tailwind para estilizar partes internas do `react-select`
     />
   );
