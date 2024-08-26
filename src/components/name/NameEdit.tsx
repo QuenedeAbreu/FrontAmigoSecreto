@@ -3,6 +3,7 @@ import * as api from '@/api/admin'
 import { InputField } from '@/components/admin/inputField'
 import { useEffect, useState } from 'react'
 import { ErrorItem, getErrorFromZod } from '@/utils/getErrorFromZod'
+import { Name } from '@/types/Name'
 import { z } from 'zod'
 import { Button } from '@/components/admin/Button'
 import { IoIosSave } from 'react-icons/io'
@@ -18,16 +19,17 @@ import { getCookie } from 'cookies-next'
 
 type Props = {
   refreshAction: () => void,
+  name: Name,
   setPageLoading: (item: boolean) => void,
   PageLoading: boolean,
   closeModal: (item: null) => {}
 }
 
 
-export const NameAdd = ({ refreshAction, setPageLoading, PageLoading, closeModal }: Props) => {
-  const [suggestedNameField, setSuggestedNameField] = useState('')
-  const [sexField, setSexField] = useState<number | undefined>(1)
-  const [descriptionField, setDescriptionField] = useState('')
+export const NameEdit = ({ name, refreshAction, setPageLoading, PageLoading, closeModal }: Props) => {
+  const [suggestedNameField, setSuggestedNameField] = useState(name.suggested_name)
+  const [sexField, setSexField] = useState<number | undefined>(name.sex)
+  const [descriptionField, setDescriptionField] = useState(name.description ? name.description : '')
   const [openAndCloseModalConfirm, setOpenAndCloseModalConfirm] = useState(false);
   const [openAndloseModalErro, setOpenAndloseModalErro] = useState(false);
   const [errors, setErrors] = useState<ErrorItem[]>([]);
@@ -81,8 +83,8 @@ export const NameAdd = ({ refreshAction, setPageLoading, PageLoading, closeModal
     if (errors.length > 0) return;
     setPageLoading(true);
     // console.log(userTokenJson);
-    const createdUser = await api.addName(userTokenJson.id, { suggested_name: suggestedNameField, sex: sexField, description: descriptionField })
-
+    const createdUser = await api.editName(userTokenJson.id, name.id, { suggested_name: suggestedNameField, sex: sexField, description: descriptionField })
+    // console.log(createdUser);
     if (createdUser) {
       setOpenAndCloseModalConfirm(true)
       refreshAction();
@@ -100,8 +102,8 @@ export const NameAdd = ({ refreshAction, setPageLoading, PageLoading, closeModal
       {/* Modal de confirmação de Edição de usuário*/}
       {openAndCloseModalConfirm &&
         <ModalConfirm
-          title="Adicionar nome"
-          description="Nome sugerido com sucesso!"
+          title="Editar nome"
+          description="Nome editado com sucesso!"
           // onConfirm={() => setOpenAndloseModalErro(false)}
           onCancel={() => setOpenAndCloseModalConfirm(false)}
           eventTitle={suggestedNameField}
@@ -113,8 +115,8 @@ export const NameAdd = ({ refreshAction, setPageLoading, PageLoading, closeModal
       {/* Modal de Erro de Edição de usuário*/}
       {openAndloseModalErro &&
         <ModalConfirm
-          title="Adicionar nome"
-          description="Erro ao sugerir o nome!"
+          title="Editar nome"
+          description="Erro ao editar o nome!"
           // onConfirm={handleDeleteButton}
           onCancel={() => setOpenAndloseModalErro(false)}
           eventTitle={suggestedNameField}

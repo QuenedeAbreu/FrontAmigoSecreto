@@ -7,6 +7,7 @@ import { Name } from '@/types/Name'
 import { ModalScreens } from '@/types/ModalScreens';
 import { Modal } from '@/components/admin/Modal';
 import { NameAdd } from '@/components/name/NameAdd';
+import { NameEdit } from '@/components/name/NameEdit';
 // import { UserEdit } from '@/components/admin/user/UserEdit';
 import { ItemButton } from '@/components/admin/ItemButton';
 import { FaPlus } from 'react-icons/fa';
@@ -35,7 +36,7 @@ export const NamePage = () => {
   const loadNomes = async () => {
     setLoadingSkeleton(true);
     const usersList = await api.getNames();
-    console.log(usersList);
+    // console.log(usersList);
     setNames(usersList);
     setLoadingSkeleton(false);
   }
@@ -95,13 +96,13 @@ export const NamePage = () => {
             />
           }
           {modalScreen === 'edit' && selectedName &&
-            <>{userOne?.name}</>
-            // <UserEdit
-            //   refreshAction={() => loadNomes()}
-            //   user={selectedName}
-            //   setPageLoading={setPageLoading}
-            //   PageLoading={PageLoading}
-            // />
+            <NameEdit
+              refreshAction={() => loadNomes()}
+              name={selectedName}
+              setPageLoading={setPageLoading}
+              PageLoading={PageLoading}
+              closeModal={async () => setModalScreen(null)}
+            />
           }
         </Modal>
       }

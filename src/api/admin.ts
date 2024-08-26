@@ -428,3 +428,40 @@ export const getNames = async () =>{
   }
 }
 
+type createdName = {
+  suggested_name: string,
+  sex?: number,
+  description?:string
+}
+//Adicionar um nome
+export const addName = async (id_user:number,data:createdName) =>{
+  const token = getCookie('token');
+  try {
+    const json = await req.post(`/admin/namekid/user/${id_user}`,data,{
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return json.data.name as Name ?? false;
+  } catch (error) {
+    console.log(error);
+    return false
+  }
+}
+
+export const editName = async (id_user:number,id:number, data:createdName) =>{
+  const token = getCookie('token');
+  try {
+    const json = await req.put(`/admin/namekid/${id}/user/${id_user}`,data,{
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return json.data.name as Name ?? false;
+  } catch (error) {
+    console.log(error);
+    return false
+  }
+}
+
+//Deletar um nome

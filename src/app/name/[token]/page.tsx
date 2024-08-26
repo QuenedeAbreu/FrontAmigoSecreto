@@ -22,6 +22,7 @@ export default function page({ params }: Props) {
   const [warning, setWarning] = useState(false);
   const [warningMessage, setWarningMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [msgRedirecting, setMsgRedirecting] = useState(false);
   const { userOne, setUserOne } = useGlobalContext()
   const router = useRouter()
 
@@ -46,7 +47,8 @@ export default function page({ params }: Props) {
         setUserOne(json.user)
         setCookie('user', json.user)
         setCookie('token', json.token)
-        router.push(`/name/${tokenParams}/name`)
+        setMsgRedirecting(true)
+        router.push(`/name/`)
       }
     }
   }
@@ -81,6 +83,10 @@ export default function page({ params }: Props) {
             <div className='h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.15s]'></div>
             <div className='h-8 w-8 bg-black rounded-full animate-bounce'></div>
           </div>
+        }
+        {msgRedirecting &&
+
+          <p>Redirecionando...</p>
         }
 
       </div>
