@@ -67,6 +67,8 @@ export const Pagination = ({ qtdPages, loadEvents, qtdItensPage, setQtdItemPage,
           onClick={prev}
           disabled={active === 1}
           placeholder=""
+          onPointerEnterCapture={() => { }}
+          onPointerLeaveCapture={() => { }}
         >
           <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" /> Anterior
         </Button>
@@ -93,6 +95,8 @@ export const Pagination = ({ qtdPages, loadEvents, qtdItensPage, setQtdItemPage,
           onClick={next}
           disabled={active === qtdPages}
           placeholder=""
+          onPointerEnterCapture={() => { }}
+          onPointerLeaveCapture={() => { }}
         >
           Próximo
           <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
