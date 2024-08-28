@@ -10,6 +10,7 @@ import { UserAdd } from '@/components/admin/user/UserAdd';
 import { UserEdit } from '@/components/admin/user/UserEdit';
 import { ItemButton } from '../ItemButton';
 import { FaPlus } from 'react-icons/fa';
+export const runtime = 'edge';
 
 
 

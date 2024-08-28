@@ -1,7 +1,7 @@
 import { getCookie } from "cookies-next";
 import { cookies } from "next/headers";
 import {req} from './axios';
-export const runtime = 'edge';
+
 // type IsTokenValid = {
 //   isTokenValid: boolean;
 //   admin: boolean;
