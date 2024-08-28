@@ -391,7 +391,7 @@ export const sendMailResetPassWord = async (id_user:number) =>{
     })
     return !json.data.error;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return false
   }
 }
@@ -444,7 +444,7 @@ export const addName = async (id_user:number,data:createdName) =>{
     })
     return json.data.name as Name ?? false;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return false
   }
 }
@@ -459,7 +459,7 @@ export const editName = async (id_user:number,id:number, data:createdName) =>{
     })
     return json.data.name as Name ?? false;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return false
   }
 }

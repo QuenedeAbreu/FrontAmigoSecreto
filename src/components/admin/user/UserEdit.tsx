@@ -25,7 +25,7 @@ type Props = {
 export const UserEdit = ({ user, refreshAction, setPageLoading, PageLoading }: Props) => {
   const [nameField, setNameField] = useState(user.name)
   const [emailField, setEmailField] = useState(user.email)
-  // const [passwordField, setPasswordField] = useState('')
+  const [nameToken, setNameToken] = useState(user.nametoken)
 
   const [isAdminField, setIsAdminFieldField] = useState(user.is_admin)
   const [isActivedField, setIsActivedField] = useState(user.is_active)
@@ -181,6 +181,18 @@ export const UserEdit = ({ user, refreshAction, setPageLoading, PageLoading }: P
           disabled={loadSendMailPassWord}
         ></Button>
       </div>
+
+      <div className="mb-5">
+        <label>Name Token</label>
+        <InputField
+          value={'/name/' + nameToken || ''}
+          disabled={true}
+          onChange={(e) => setNameToken(e.target.value)}
+          placeholder="Name Token"
+        // errorMessage={errors.find(error => error.field === 'emailField')?.message}
+        />
+      </div>
+
       <div className='flex mb-5'>
         <div className='flex flex-col flex-1 items-center justify-center'>
           <label>É administrador?</label>
