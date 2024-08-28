@@ -1,6 +1,7 @@
 import * as api from "@/api/site";
 import { redirect } from "next/navigation";
 import Search from "@/components/site/Search"
+export const runtime = 'edge';
 
 type Props = {
   params: {

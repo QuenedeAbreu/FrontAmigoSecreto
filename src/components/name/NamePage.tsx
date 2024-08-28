@@ -13,7 +13,7 @@ import { ItemButton } from '@/components/admin/ItemButton';
 import { FaPlus } from 'react-icons/fa';
 import { useGlobalContext } from "@/provider/globlalProvider";
 import { getCookie } from 'cookies-next';
-
+export const runtime = 'edge';
 
 
 export const NamePage = () => {

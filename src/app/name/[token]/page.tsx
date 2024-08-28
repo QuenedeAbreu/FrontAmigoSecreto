@@ -9,7 +9,7 @@ import { setCookie } from "cookies-next";
 import { Button } from "@/components/admin/Button";
 import { IoMdPersonAdd } from "react-icons/io";
 import { RiLoginCircleLine } from "react-icons/ri";
-
+export const runtime = 'edge';
 type Props = {
   params: {
     token: string;

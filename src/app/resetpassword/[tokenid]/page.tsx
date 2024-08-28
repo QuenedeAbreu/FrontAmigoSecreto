@@ -13,7 +13,7 @@ import { IoMdPersonAdd } from "react-icons/io";
 import { ErrorItem, getErrorFromZod } from "@/utils/getErrorFromZod";
 import { ModalConfirm } from "@/components/admin/ModalConfirm";
 import { FaKey } from "react-icons/fa";
-
+export const runtime = 'edge';
 
 type Props = {
   params: {

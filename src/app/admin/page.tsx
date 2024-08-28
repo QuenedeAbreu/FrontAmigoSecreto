@@ -6,5 +6,6 @@ export default async function page() {
   const logged = await api.isTokenValid();
   if (!logged) return redirect('/admin/login');
   if (!logged.acessall) return redirect('/admin/login');
+
   return <AdminPage />
 }	
