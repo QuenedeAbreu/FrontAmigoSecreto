@@ -14,9 +14,8 @@ import { jwtDecode } from 'jwt-decode'
 import { getCookie } from 'cookies-next'
 import { Pagination } from '@/components/admin/Pagination'
 import { SearchDropdown } from './Search'
+
 export const runtime = 'edge';
-
-
 export const AdminPage = () => {
 
   const [events, setEvents] = useState<Event[]>([])
