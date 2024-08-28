@@ -5,7 +5,7 @@ import { Group } from '@/types/Group';
 import { PersonComplete } from '@/types/PersonComplete';
 import { User } from '@/types/User'
 import {Name} from '@/types/Name'
-
+export const runtime = 'edge';
 
 // Uses
 export const login = async (email:string, password:string) =>{

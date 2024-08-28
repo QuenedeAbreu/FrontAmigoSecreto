@@ -1,7 +1,7 @@
 import {req} from '@/api/axios'
 import { SearchResult } from '@/types/SearchResult'
 import {Event} from '@/types/events'
-
+export const runtime = 'edge';
 export async function getEvent( id:number):Promise<Event|false>{
   try {
     const resultEvent = await req.get(`/events/${id}`)
