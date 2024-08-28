@@ -2,7 +2,7 @@
 import * as api from '@/api/server'
 import { redirect } from 'next/navigation';
 import { UserPage } from '@/components/admin/user/UserPage'
-
+export const runtime = 'edge';
 
 export default async function page() {
 

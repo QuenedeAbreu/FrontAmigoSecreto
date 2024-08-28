@@ -13,7 +13,7 @@ import { Modal } from "@/components/admin/Modal";
 import { RegisterFirstUser } from '@/components/admin/RegisterFirstUser'
 import { useGlobalContext } from '@/provider/globlalProvider'
 import { BgAnimated } from "@/components/admin/BgAnimated";
-
+export const runtime = 'edge';
 
 export default function page() {
   const [emailInput, setEmailInput] = useState('');

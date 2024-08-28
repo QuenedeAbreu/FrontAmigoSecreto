@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import 'primeicons/primeicons.css'
 import { GlobalContextProvider } from '@/provider/globlalProvider'
-
+export const runtime = 'edge';
 export const metadata: Metadata = {
   title: 'Amigo Secreto',
   description: '',
