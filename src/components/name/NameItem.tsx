@@ -11,6 +11,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken'
 import * as api from "@/api/admin"
 import { getCookie } from "cookies-next";
 import { jwtDecode } from "jwt-decode";
+import { BsFillHandThumbsDownFill, BsFillHandThumbsUpFill } from "react-icons/bs";
 
 type Props = {
   item: Name;
@@ -48,7 +49,7 @@ export const NameItem = ({ item, openModal, refreshAction, setPageLoading }: Pro
   const userJwt = jwt.decode(getCookie('token') as string) as IJwtPayload;
 
   return (
-    <div className='border border-gray-700 rounded min-h-[74px] p-3 mb-3 flex flex-col items-center md:flex-row'>
+    <div className='relative border border-gray-700 rounded min-h-[74px] p-3 mb-3 flex flex-col items-center md:flex-row'>
 
       {openAndloseModalErro &&
         <ModalConfirm
@@ -80,6 +81,19 @@ export const NameItem = ({ item, openModal, refreshAction, setPageLoading }: Pro
           <div className="text-blue-500"> <FaChild /> </div> ||
           <div className="text-pink-500"><FaChildDress /></div>}
         <div className="ml-2">{item.suggested_name}</div>
+
+
+
+      </div>
+      <div className="flex items-center justify-evenly bg-slate-950 border border-gray-700 rounded  w-20 h-6 md:absolute md:-mb-16 md:mt-0 mt-4">
+        <div className="flex items-center text-green-500 ">
+          <BsFillHandThumbsUpFill className="mr-1 hover:cursor-pointer hover:text-green-300 transition-all" />
+          <p>{item.positiveVoteCount}</p>
+        </div>
+        <div className="flex items-center text-red-500">
+          <BsFillHandThumbsDownFill className="mr-1 hover:cursor-pointer hover:text-red-300 transition-all" />
+          <p>{item.negativeVoteCount}</p>
+        </div>
       </div>
       <div className='flex items-center gap-1 mt-2 md:mt-0'>
         {item.id_user === parseInt(userJwt.id) &&
