@@ -12,4 +12,5 @@ export type Name ={
   negativeVoteCount?:number,
   description?:string;
   createdAt?:string;
+  is_voted : Boolean;
 }

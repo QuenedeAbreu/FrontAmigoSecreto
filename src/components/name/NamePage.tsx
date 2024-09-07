@@ -13,7 +13,15 @@ import { ItemButton } from '@/components/admin/ItemButton';
 import { FaPlus } from 'react-icons/fa';
 import { useGlobalContext } from "@/provider/globlalProvider";
 import { getCookie } from 'cookies-next';
+import { jwtDecode } from 'jwt-decode';
+import jwt, { JwtPayload } from 'jsonwebtoken'
 export const runtime = 'edge';
+
+type IJwtPayload = JwtPayload & {
+  id: string;
+}
+
+
 export const NamePage = () => {
 
   const [names, setNames] = useState<Name[]>([])
@@ -24,6 +32,9 @@ export const NamePage = () => {
   const { userOne, setUserOne } = useGlobalContext()
 
   const cookiesUser = getCookie('user');
+  const token = getCookie('token');
+  const userJwt = jwt.decode(getCookie('token') as string) as IJwtPayload;
+
 
   useEffect(() => {
     if (cookiesUser) {
@@ -33,9 +44,10 @@ export const NamePage = () => {
 
   const loadNomes = async () => {
     setLoadingSkeleton(true);
-    const usersList = await api.getNames();
-    // console.log(usersList);
-    setNames(usersList);
+    if (token) {
+      const usersList = await api.getNamesAllId(parseInt(userJwt.id));
+      setNames(usersList);
+    }
     setLoadingSkeleton(false);
   }
 
