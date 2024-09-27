@@ -6,12 +6,11 @@ import { FaRegEdit } from "react-icons/fa";
 import { FaUserSlash, FaUserCheck, FaChild, FaChildDress } from "react-icons/fa6";
 import { IoIosWarning } from "react-icons/io";
 import { IoCloseCircle } from "react-icons/io5";
-import { useGlobalContext } from "@/provider/globlalProvider";
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import * as api from "@/api/admin"
 import { getCookie } from "cookies-next";
-import { jwtDecode } from "jwt-decode";
 import { BsFillHandThumbsDownFill, BsFillHandThumbsUpFill } from "react-icons/bs";
+import { MdBlock } from "react-icons/md";
 
 type Props = {
   item: Name;
@@ -27,17 +26,25 @@ type IJwtPayload = JwtPayload & {
 export const NameItem = ({ item, openModal, refreshAction, setPageLoading }: Props) => {
   const [openAndloseModalErro, setOpenAndloseModalErro] = useState(false)
   const [openAndCloseModalConfirm, setOpenAndCloseModalConfirm] = useState(false);
-  const { userOne, setUserOne } = useGlobalContext()
   const handleEditButton = async () => { openModal(item) }
-  const token = getCookie('token');
-  const userTokenDecod = jwtDecode(token as string)
-  if (!userTokenDecod) return
-  const userTokenDecodString = JSON.stringify(userTokenDecod)
-  const userTokenJson = JSON.parse(userTokenDecodString)
+
+  const userJwt = jwt.decode(getCookie('token') as string) as IJwtPayload;
+
+  const handleVoteButton = async (vote: boolean) => {
+    setPageLoading(true)
+    const resultVoteName = await api.voteName(item.id, parseInt(userJwt.id), vote)
+    if (resultVoteName) {
+      refreshAction()
+      setPageLoading(false)
+    } else {
+      setPageLoading(false)
+      setOpenAndloseModalErro(true)
+    }
+  }
 
   const handleDeleteButton = async () => {
     setPageLoading(true)
-    const resultPersonDelete = await api.deleteName(item.id, userTokenJson.id)
+    const resultPersonDelete = await api.deleteName(item.id, parseInt(userJwt.id))
     if (resultPersonDelete) {
       refreshAction()
       setPageLoading(false)
@@ -46,7 +53,6 @@ export const NameItem = ({ item, openModal, refreshAction, setPageLoading }: Pro
       setOpenAndloseModalErro(true)
     }
   }
-  const userJwt = jwt.decode(getCookie('token') as string) as IJwtPayload;
 
   return (
     <div className='relative border border-gray-700 rounded min-h-[74px] p-3 mb-3 flex flex-col items-center md:flex-row'>
@@ -86,14 +92,38 @@ export const NameItem = ({ item, openModal, refreshAction, setPageLoading }: Pro
 
       </div>
       <div className="flex items-center justify-evenly bg-slate-950 border border-gray-700 rounded  w-20 h-6 md:absolute md:-mb-16 md:mt-0 mt-4">
-        <div className="flex items-center text-green-500 ">
-          <BsFillHandThumbsUpFill className="mr-1 hover:cursor-pointer hover:text-green-300 transition-all" />
-          <p>{item.positiveVoteCount}</p>
-        </div>
-        <div className="flex items-center text-red-500">
-          <BsFillHandThumbsDownFill className="mr-1 hover:cursor-pointer hover:text-red-300 transition-all" />
-          <p>{item.negativeVoteCount}</p>
-        </div>
+        {item.is_voted !== true &&
+          <div className="flex items-center text-green-500 ">
+            <button onClick={() => handleVoteButton(true)}>
+              <BsFillHandThumbsUpFill className="mr-1 hover:cursor-pointer hover:text-green-300 transition-all" />
+            </button>
+            <p>{item.positiveVoteCount}</p>
+          </div>
+        }
+        {item.is_voted === true &&
+          <div className="flex items-center text-green-500 ">
+            {/* <BsFillHandThumbsUpFill className="mr-1 hover:cursor-pointer hover:text-green-300 transition-all" /> */}
+            <MdBlock className="mr-1 hover:cursor-not-allowed text-green-500 transition-all" />
+            <p>{item.positiveVoteCount}</p>
+          </div>
+        }
+
+        {item.is_voted !== false &&
+          <div className="flex items-center text-red-500">
+            <button onClick={() => handleVoteButton(false)}>
+              <BsFillHandThumbsDownFill className="mr-1 hover:cursor-pointer hover:text-red-300 transition-all" />
+            </button>
+            <p>{item.negativeVoteCount}</p>
+          </div>
+        }
+
+        {item.is_voted === false &&
+          <div className="flex items-center text-red-500">
+            {/* <BsFillHandThumbsDownFill className="mr-1 hover:cursor-pointer hover:text-red-300 transition-all" /> */}
+            <MdBlock className="mr-1 hover:cursor-not-allowed  transition-all" />
+            <p>{item.negativeVoteCount}</p>
+          </div>
+        }
       </div>
       <div className='flex items-center gap-1 mt-2 md:mt-0'>
         {item.id_user === parseInt(userJwt.id) &&

@@ -427,6 +427,23 @@ export const getNames = async () =>{
   }
 }
 
+// Busca todos os nomes 
+export const getNamesAllId = async (id_user:number) =>{
+  const token = getCookie('token');
+  try {
+    const json = await req.get(`/admin/namekid/vote/${id_user}`,{
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    return json.data.names as Name[] ?? [];
+  } catch (error) {
+    // console.log(error);
+    return []
+  }
+}
+
 type createdName = {
   suggested_name: string,
   sex?: number,
@@ -447,7 +464,7 @@ export const addName = async (id_user:number,data:createdName) =>{
     return false
   }
 }
-
+//Editar nome
 export const editName = async (id_user:number,id:number, data:createdName) =>{
   const token = getCookie('token');
   try {
@@ -468,6 +485,24 @@ export const deleteName = async (id:number, id_user:number) =>{
   const token = getCookie('token');
   try {
     const json = await req.delete(`/admin/namekid/${id}/user/${id_user}`,{
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return !json.data.error;
+  } catch (error) {
+    console.log(error);
+    return false
+  }
+}
+
+//Vote nameki positve
+export const voteName = async (id_name:number, id_user:number,vote:boolean) =>{
+  const token = getCookie('token');
+  try {
+    const json = await req.post(`/admin/namekid/vote/${id_name}/user/${id_user}`,{
+      vote
+    },{
       headers:{
         Authorization: `Bearer ${token}`
       }
