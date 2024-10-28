@@ -29,6 +29,7 @@ export const NameAdd = ({ refreshAction, setPageLoading, PageLoading, closeModal
   const [sexField, setSexField] = useState<number | undefined>(1)
   const [descriptionField, setDescriptionField] = useState('')
   const [openAndCloseModalConfirm, setOpenAndCloseModalConfirm] = useState(false);
+
   const [openAndloseModalErro, setOpenAndloseModalErro] = useState(false);
   const [errors, setErrors] = useState<ErrorItem[]>([]);
 
@@ -97,7 +98,7 @@ export const NameAdd = ({ refreshAction, setPageLoading, PageLoading, closeModal
 
   return (
     <div>
-      {/* Modal de confirmação de Edição de usuário*/}
+
       {openAndCloseModalConfirm &&
         <ModalConfirm
           title="Adicionar nome"
@@ -141,7 +142,7 @@ export const NameAdd = ({ refreshAction, setPageLoading, PageLoading, closeModal
               checked={sexField === 1}
               onChange={e => handleCheckboxChange(1)}
               className='block mr-2 w-5 h-5 '
-              disabled={PageLoading}
+              disabled={true}
             />
             <label>Menino</label>
           </div>
@@ -152,7 +153,7 @@ export const NameAdd = ({ refreshAction, setPageLoading, PageLoading, closeModal
               checked={sexField === 0}
               onChange={e => handleCheckboxChange(0)}
               className='block  mr-2 w-5 h-5'
-              disabled={PageLoading}
+              disabled={true}
             />
             <label>Menina</label>
           </div>

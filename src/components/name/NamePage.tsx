@@ -15,6 +15,8 @@ import { useGlobalContext } from "@/provider/globlalProvider";
 import { getCookie } from 'cookies-next';
 import { jwtDecode } from 'jwt-decode';
 import jwt, { JwtPayload } from 'jsonwebtoken'
+import { ModalConfirm } from '@/components/admin/ModalConfirm'
+import { IoIosWarning } from 'react-icons/io';
 export const runtime = 'edge';
 
 type IJwtPayload = JwtPayload & {
@@ -30,7 +32,9 @@ export const NamePage = () => {
   const [selectedName, setSelectedName] = useState<Name>();
   const [modalScreen, setModalScreen] = useState<ModalScreens>(null);
   const { userOne, setUserOne } = useGlobalContext()
-
+  const [openAndCloseModalWarning, setOpenAndCloseModalWarning] = useState(true);
+  const [openAndCloseModalConfirm, setOpenAndCloseModalConfirm] = useState(false);
+  const [suggestedNameField, setSuggestedNameField] = useState('')
   const cookiesUser = getCookie('user');
   const token = getCookie('token');
   const userJwt = jwt.decode(getCookie('token') as string) as IJwtPayload;
@@ -62,6 +66,18 @@ export const NamePage = () => {
 
   return (
     <div className='mx-auto w-full max-w-3xl p-3'>
+      {/* Modal de Aviso de menino*/}
+      {openAndCloseModalWarning &&
+        <ModalConfirm
+          title="Aew!!! É Menino!"
+          description="Apenas nomes de Meninos!"
+          // onConfirm={() => setOpenAndloseModalErro(false)}
+          onCancel={() => setOpenAndCloseModalWarning(false)}
+          eventTitle={suggestedNameField}
+          IconElement={IoIosWarning}
+          type="warning2"
+        />
+      }
       {PageLoading && <FullPageLoading />}
       <div className='p-3 flex items-center' >
         <div className='flex-1'>

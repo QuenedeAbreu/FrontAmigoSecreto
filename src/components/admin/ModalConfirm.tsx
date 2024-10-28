@@ -10,7 +10,7 @@ type Props = {
   onCancel: () => void
   eventTitle?: string
   IconElement?: IconType
-  type?: 'success' | 'error' | 'warning' | 'info'
+  type?: 'success' | 'error' | 'warning' | 'info' | 'warning2'
 }
 
 export const ModalConfirm = ({ title, description, onConfirm, onCancel, eventTitle, IconElement, type }: Props) => {
@@ -43,6 +43,7 @@ export const ModalConfirm = ({ title, description, onConfirm, onCancel, eventTit
 
               <h2 className="text-xl font-bold tracking-tight flex flex-col justify-center items-center" id="page-action.heading">
                 {type == "warning" && <span className='mb-1'>{IconElement ? <IconElement className='animate-pulse-icon text-orange-400' /> : ""}</span>}
+                {type == "warning2" && <span className='mb-1'>{IconElement ? <IconElement className='animate-pulse-icon text-orange-400' /> : ""}</span>}
                 {type == "error" && <span className='mb-1'>{IconElement ? <IconElement className='animate-pulse-icon text-red-600' /> : ""}</span>}
                 {type == "success" && <span className='mb-1'>{IconElement ? <IconElement className='animate-pulse-icon text-green-500' /> : ""}</span>}
                 {title}
@@ -54,6 +55,7 @@ export const ModalConfirm = ({ title, description, onConfirm, onCancel, eventTit
               <p className="text-gray-500">
                 {description}
               </p>
+              <img src="/img/img_modal.jpg" alt="Logo Ninja" className=" mx-auto" />
             </div>
           </div>
 
@@ -69,6 +71,7 @@ export const ModalConfirm = ({ title, description, onConfirm, onCancel, eventTit
                   className="inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 hover:bg-gray-50 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800">
                   <span className="flex flex-col justify-center items-center gap-1">
                     <span className="flex justify-center items-center gap-1" >
+                      {type == 'warning2' && <><FaCheck className='' /> Confirmar</>}
                       {type == 'warning' && <><MdOutlineCancel /> Cancelar</>}
                       {type == 'error' && <><FaCheck className='' /> OK</>}
                       {type == 'info' && <>Cancelar</>}
@@ -77,7 +80,7 @@ export const ModalConfirm = ({ title, description, onConfirm, onCancel, eventTit
                   </span>
                 </button>
 
-                {type != 'error' && type != 'success' && <>
+                {type != 'error' && type != 'success' && type != 'warning2' && <>
                   <button onClick={onConfirm}
                     type="button"
                     className="inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-white shadow focus:ring-white border-transparent bg-red-600 hover:bg-red-500 focus:bg-red-700 focus:ring-offset-red-700">
